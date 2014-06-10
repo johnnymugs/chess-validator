@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Knight do
   describe "#possible_moves" do
-    subject { Knight.new.possible_moves.map { |move| move + current_position } }
+    subject { Knight.new.possible_moves.map{ |move| move + current_position }.map(&:to_s) }
 
     context "from f3" do
       let(:current_position) { Position.new("f3") }

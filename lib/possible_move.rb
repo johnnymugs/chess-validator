@@ -9,7 +9,7 @@ class PossibleMove
   end
 
   def +(position)
-    file_as_notation(@file + position.file) + (@rank + position.rank).to_s
+    Position.new(file: @file + position.file, rank: @rank + position.rank)
   end
 
   private

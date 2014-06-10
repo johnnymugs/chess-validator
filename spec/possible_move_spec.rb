@@ -37,7 +37,7 @@ describe PossibleMove do
       let(:file) { 0 }
       let(:current_position) { Position.new("a1") }
 
-      it { should == "a2" }
+      it { should == Position.new("a2") }
     end
   end
 end
