@@ -2,9 +2,9 @@
 - Can't move to occupied squares of same color
 - Pawn (et al) attacking/non-attacking moves
 - Make console
-- Knights
+- Knights - basic
 - Bishop
-- Rook
+- Rook - basic
 - Queen
 - King
 - Duplicate moves/ambiguous moves (like Rc8)

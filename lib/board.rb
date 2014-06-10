@@ -17,12 +17,26 @@ class Board
   end
 
   def legal_moves_for(piece)
-    position = nil
-    @pieces.each { |k,v| position = Position.new(k) if v == piece }
-    raise RuntimeError.new("Piece not found on board") unless position
-    piece.basic_moves
-      .map { |move| move + position }
-      .select { |position| is_within_bounds?(position) }
+    piece_position = nil
+
+    @pieces.each { |k,v| piece_position = Position.new(k) if v == piece }
+    raise RuntimeError.new("Piece not found on board") unless piece_position
+
+    legal_moves = []
+
+    piece.basic_moves.each do |move|
+      if move.takes_steps?
+        step = 1
+        while((next_move = move.from_position(piece_position, step: step)) && is_within_bounds?(next_move))
+          legal_moves << next_move
+          step += 1
+        end
+      else
+        next_move = move.from_position(piece_position)
+        legal_moves << next_move if is_within_bounds?(next_move)
+      end
+    end
+    legal_moves
   end
 
   private

@@ -24,14 +24,26 @@ describe Board do
   end
 
   describe "#legal_moves_for" do
-    before { board.add(piece: Knight.new, at: position) }
+    before { board.add(piece: piece, at: position) }
     subject { board.legal_moves_for(board.piece_at(position)).map(&:to_s) }
     let(:board) { Board.new }
 
     context "when basic moves would move off the board" do
       let(:position) { "b1" }
+      let(:piece) { Knight.new }
+
       it "filters out the illegal moves" do
         expect(subject).to match_array(['a3', 'c3', 'd2'])
+      end
+    end
+
+    context "with advancing moves" do
+      let(:position) { "b2" }
+      let(:piece) { Rook.new }
+
+      it "calculates moves to the end of the board" do
+        expect(subject).to match_array([ 'b1', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8',
+                                         'a2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2' ])
       end
     end
   end

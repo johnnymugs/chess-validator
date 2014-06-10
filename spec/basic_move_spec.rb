@@ -29,15 +29,96 @@ describe BasicMove do
     end
   end
 
-  describe "#+" do
-    subject { BasicMove.new(rank: rank, file: file) + current_position }
+  describe "#from_position" do
+    let(:position) { Position.new("d4") }
 
-    context "with a positive value for rank" do
-      let(:rank) { 1 }
-      let(:file) { 0 }
-      let(:current_position) { Position.new("a1") }
+    context "with steps specified" do
+      subject { move.from_position(position, step: step).to_s }
+      let(:step) { 2 }
 
-      it { should == Position.new("a2") }
+      context "when the move takes steps on the rank" do
+        let(:move) { BasicMove.new(rank: "+n", file: 0) }
+
+        it { should == "d6" }
+      end
+
+      context "when the move takes backward steps on the rank" do
+        let(:move) { BasicMove.new(rank: "-n", file: 0) }
+
+        it { should == "d2" }
+      end
+
+      context "when the move takes steps on the file" do
+        let(:move) { BasicMove.new(rank: 0, file: "+n") }
+
+        it { should == "f4" }
+      end
+
+      context "when the move takes backwards steps on the file" do
+        let(:move) { BasicMove.new(rank: 0, file: "-n") }
+
+        it { should == "b4" }
+      end
+
+      context "when the move does not take steps" do
+        let(:move) { BasicMove.new(rank: 1, file: 0) }
+
+        it "should quietly ignore the step" do
+          expect(subject).to eq("d5")
+        end
+      end
+    end
+
+    context "without steps specified" do
+      subject { move.from_position(position).to_s }
+
+      context "when the move does not take steps" do
+        let(:move) { BasicMove.new(rank: 1, file: 0) }
+
+        it { should == "d5" }
+      end
+
+      context "when the move takes steps" do
+        let(:move) { BasicMove.new(rank: "+n", file: 0) }
+
+        it "should silently just use one step" do
+          expect(subject).to eq("d5")
+        end
+      end
+    end
+  end
+
+  describe "#takes_steps?" do
+    subject { move.takes_steps? }
+    context "when the move takes steps on the rank" do
+      let(:move) { BasicMove.new(rank: "+n", file: 0) }
+
+      it { should be_truthy }
+    end
+
+    context "when the move takes backward steps on the rank" do
+      let(:move) { BasicMove.new(rank: "-n", file: 0) }
+
+      it { should be_truthy }
+    end
+
+    context "when the move takes steps on the file" do
+      let(:move) { BasicMove.new(rank: 0, file: "+n") }
+
+      it { should be_truthy }
+    end
+
+    context "when the move takes backwards steps on the file" do
+      let(:move) { BasicMove.new(rank: 0, file: "-n") }
+
+      it { should be_truthy }
+    end
+
+    context "when the move does not take steps" do
+      let(:move) { BasicMove.new(rank: 1, file: 0) }
+
+      it { should be_falsy }
     end
   end
 end
+
