@@ -65,5 +65,30 @@ describe Position do
       it { should be_falsy }
     end
   end
+
+  describe "#to_s" do
+    subject { Position.new(rank: rank, file: file).to_s }
+
+    context "with rank and file in range" do
+      let(:rank) { 8 }
+      let(:file) { 2 }
+
+      it { should == "b8" }
+    end
+
+    context "with rank out of range" do
+      let(:rank) { 9 }
+      let(:file) { 2 }
+
+      it { should == "(╯°□°)╯︵ ┻━┻ (position is off the board)" }
+    end
+
+    context "with file out of range" do
+      let(:rank) { 7 }
+      let(:file) { -1 }
+
+      it { should == "(╯°□°)╯︵ ┻━┻ (position is off the board)" }
+    end
+  end
 end
 

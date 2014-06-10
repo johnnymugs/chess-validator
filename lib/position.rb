@@ -9,7 +9,7 @@ class Position
       @file = file_to_coord(position_in_notation[0])
       @rank = position_in_notation[1].to_i
 
-      raise ArgumentError unless (1..8).include?(@rank) && (1..8).include?(@file)
+      raise ArgumentError unless valid_rank_and_file?
     else
       @file = file
       @rank = rank
@@ -20,10 +20,23 @@ class Position
     @file == other_position.file && @rank == other_position.rank
   end
 
+  def to_s
+    return "(╯°□°)╯︵ ┻━┻ (position is off the board)" unless valid_rank_and_file?
+    file_as_notation + @rank.to_s
+  end
+
   private
 
   def file_to_coord(file)
     file.downcase.ord - ASCII_OFFSET
+  end
+
+  def file_as_notation
+    (@file + ASCII_OFFSET).chr
+  end
+
+  def valid_rank_and_file?
+    (1..8).include?(@rank) && (1..8).include?(@file)
   end
 end
 
