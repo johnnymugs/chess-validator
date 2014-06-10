@@ -22,5 +22,18 @@ describe Board do
       it { should raise_error }
     end
   end
+
+  describe "#legal_moves_for" do
+    before { board.add(piece: Knight.new, at: position) }
+    subject { board.legal_moves_for(board.piece_at(position)).map(&:to_s) }
+    let(:board) { Board.new }
+
+    context "when basic moves would move off the board" do
+      let(:position) { "b1" }
+      it "filters out the illegal moves" do
+        expect(subject).to match_array(['a3', 'c3', 'd2'])
+      end
+    end
+  end
 end
 
