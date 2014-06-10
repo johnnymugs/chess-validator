@@ -24,7 +24,7 @@ class Board
       step = 1
       loop do
         next_move = move.from_position(piece_position, step: step)
-        break unless is_within_bounds?(next_move)
+        break unless is_within_bounds?(next_move) && !piece_at(next_move.to_s)
         legal_moves << next_move
         break unless move.takes_steps?
         step += 1

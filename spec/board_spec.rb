@@ -46,6 +46,28 @@ describe Board do
                                          'a2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2' ])
       end
     end
+
+    context "with a piece blocking the way" do
+      before { board.add(piece: Rook.new, at: "b4") }
+
+      context "with advancing moves" do
+        let(:position) { "b2" }
+        let(:piece) { Rook.new }
+
+        it "calculates moves up to the blocking piece" do
+          expect(subject).to match_array([ 'b1', 'b3', 'a2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2' ])
+        end
+      end
+
+      context "with non-advancing moves" do
+        let(:position) { "d3" }
+        let(:piece) { Knight.new }
+
+        it "filters out the illegal move" do
+          expect(subject).to match_array(['b2', 'c1', 'c5', 'e1', 'e5', 'f2', 'f4'])
+        end
+      end
+    end
   end
 end
 

@@ -1,5 +1,5 @@
 - Can't move off board - ok!
-- Can't move to occupied squares of same color
+- Can't move to occupied squares of same color - ok!
 - Pawn (et al) attacking/non-attacking moves
 - Make console - basic
 - Knights - basic
