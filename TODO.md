@@ -3,9 +3,9 @@
 - Pawn (et al) attacking/non-attacking moves
 - Make console
 - Knights - basic
-- Bishop
+- Bishop - basic
 - Rook - basic
-- Queen
+- Queen - basic
 - King
 - Duplicate moves/ambiguous moves (like Rc8)
 - Capture notation?
