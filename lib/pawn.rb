@@ -1,4 +1,4 @@
-class Pawn
+class Pawn < Piece
 
 end
 

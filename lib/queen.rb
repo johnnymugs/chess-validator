@@ -1,4 +1,4 @@
-class Queen
+class Queen < Piece
   def basic_moves
     [
       BasicMove.new(rank: '+n', file: 0),
@@ -11,4 +11,9 @@ class Queen
       BasicMove.new(rank: '-n', file: '+n')
     ]
   end
+
+  def to_s
+    @side == :white ? "\u2655" : "\u265B"
+  end
 end
+

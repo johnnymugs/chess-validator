@@ -14,5 +14,5 @@
 - Can't move into check
 - Detect check/checkmate
 - Pawn promotion
-- Print board
+- Print board - ok!
 
