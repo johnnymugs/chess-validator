@@ -1,4 +1,4 @@
-class PossibleMove
+class BasicMove
   ASCII_OFFSET = 96
 
   attr_reader :rank, :file

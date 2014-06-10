@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe PossibleMove do
+describe BasicMove do
   describe "#rank" do
-    subject { PossibleMove.new(rank: rank).rank }
+    subject { BasicMove.new(rank: rank).rank }
 
     context "when rank is specified" do
       let(:rank) { 1 }
@@ -16,7 +16,7 @@ describe PossibleMove do
   end
 
   describe "#file" do
-    subject { PossibleMove.new(file: file).file }
+    subject { BasicMove.new(file: file).file }
 
     context "when file is specified" do
       let(:file) { 1 }
@@ -30,7 +30,7 @@ describe PossibleMove do
   end
 
   describe "#+" do
-    subject { PossibleMove.new(rank: rank, file: file) + current_position }
+    subject { BasicMove.new(rank: rank, file: file) + current_position }
 
     context "with a positive value for rank" do
       let(:rank) { 1 }
