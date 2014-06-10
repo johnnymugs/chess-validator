@@ -2,28 +2,47 @@ require 'spec_helper'
 
 describe Position do
   describe "#initialize" do
-    subject { -> { Position.new(position_in_notation) } }
+    context "with a position given in notation" do
+      subject { -> { Position.new(position_in_notation) } }
 
-    context "with a valid position" do
-      let(:position_in_notation) { "h1" }
+      context "with a valid position" do
+        let(:position_in_notation) { "h1" }
 
-      it { should_not raise_error }
+        it { should_not raise_error }
 
-      it "should set rank and file as numbered coordinates" do
-        position = subject.call
-        expect(position.file).to eq(8)
-        expect(position.rank).to eq(1)
+        it "should set rank and file as numbered coordinates" do
+          position = subject.call
+          expect(position.file).to eq(8)
+          expect(position.rank).to eq(1)
+        end
+      end
+
+      context "with an out of range file" do
+        let(:position_in_notation) { "i1" }
+        it { should raise_error }
+      end
+
+      context "with an out of range rank" do
+        let(:position_in_notation) { "a9" }
+        it { should raise_error }
       end
     end
 
-    context "with an out of range file" do
-      let(:position_in_notation) { "i1" }
-      it { should raise_error }
+    context "with rank and file coordinates given" do
+      it "doesn't throw an error" do
+        expect { Position.new(file: 1, rank: 1) }.to_not raise_error
+      end
+
+      it "sets rank and file values" do
+        expect(Position.new(file: 3, rank: 1).file).to eq(3)
+        expect(Position.new(file: 1, rank: 2).rank).to eq(2)
+      end
     end
 
-    context "with an out of range rank" do
-      let(:position_in_notation) { "a9" }
-      it { should raise_error }
+    context "with neither rank and file coordinates or notational coordinates given" do
+      it "throws an error" do
+        expect { Position.new }.to raise_error
+      end
     end
   end
 
