@@ -6,7 +6,7 @@
 - Bishop - basic
 - Rook - basic
 - Queen - basic
-- King
+- King - basic
 - Duplicate moves/ambiguous moves (like Rc8)
 - Capture notation?
 - Pawn first move, pawn capture, pawn en passant
