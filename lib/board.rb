@@ -17,13 +17,9 @@ class Board
   end
 
   def legal_moves_for(piece)
-    piece_position = nil
-
-    @pieces.each { |k,v| piece_position = Position.new(k) if v == piece }
-    raise RuntimeError.new("Piece not found on board") unless piece_position
+    piece_position = position_for_piece(piece)
 
     legal_moves = []
-
     piece.basic_moves.each do |move|
       step = 1
       loop do
@@ -48,6 +44,10 @@ class Board
     file = position[0] # a...h
     rank = position[1] # 1...8
     ('a'..'h').include?(file.downcase) && ('1'..'8').include?(rank)
+  end
+
+  def position_for_piece(piece)
+    @pieces.map{ |k,v| Position.new(k) if v == piece }.first || raise(RuntimeError.new("Piece not found on board"))
   end
 end
 
