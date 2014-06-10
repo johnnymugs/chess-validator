@@ -8,7 +8,7 @@
 - Queen - basic
 - King - basic
 - Duplicate moves/ambiguous moves (like Rc8)
-- Capture notation?
+- Capture notation? / Move notation
 - Pawn first move, pawn capture, pawn en passant
 - Can/Can't castle appropriately
 - Can't move into check
