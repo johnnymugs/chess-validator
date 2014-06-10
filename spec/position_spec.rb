@@ -26,5 +26,25 @@ describe Position do
       it { should raise_error }
     end
   end
+
+  describe "#==" do
+    subject { position1 == position2 }
+    let(:position1) { Position.new("a1") }
+
+    context "when two positions are on the same rank and file" do
+      let(:position2) { Position.new("a1") }
+      it { should be_truthy }
+    end
+
+    context "when two positions are on different ranks" do
+      let(:position2) { Position.new("a2") }
+      it { should be_falsy }
+    end
+
+    context "when two positions are on different files" do
+      let(:position2) { Position.new("b1") }
+      it { should be_falsy }
+    end
+  end
 end
 

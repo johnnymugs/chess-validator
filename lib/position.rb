@@ -10,6 +10,10 @@ class Position
     raise ArgumentError unless (1..8).include?(@rank) && (1..8).include?(@file)
   end
 
+  def ==(other_position)
+    @file == other_position.file && @rank == other_position.rank
+  end
+
   private
 
   def file_to_coord(file)
