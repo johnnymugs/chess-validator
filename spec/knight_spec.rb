@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Knight do
+  it_should_behave_like "a piece"
+
   describe "#basic_moves" do
     subject { Knight.new.basic_moves.map{ |move| move.from_position(current_position) }.map(&:to_s) }
 
