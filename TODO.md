@@ -1,6 +1,5 @@
-- Pawn first move, pawn en passant
+- Pawn en passant
 - Pawn promotion
-
 - Duplicate moves/ambiguous moves (like Rc8)
 - Capture notation? / Move notation
 - Can/Can't castle appropriately
