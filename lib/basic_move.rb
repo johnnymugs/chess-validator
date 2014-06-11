@@ -3,16 +3,18 @@ class BasicMove
 
   attr_reader :rank, :file
 
-  def initialize(rank: nil, file: nil, requires_capture: false)
+  def initialize(rank: nil, file: nil, requires_capture: false, can_capture: true)
     @rank = rank || 0
     @file = file || 0
     @requires_capture = requires_capture
+    @can_capture = can_capture
   end
 
   def from_position(position, step: 1)
     LegitMove.new(file: n_to_move(@file, step) + position.file,
                   rank: n_to_move(@rank, step) + position.rank,
-                  requires_capture: @requires_capture)
+                  requires_capture: @requires_capture,
+                  can_capture: @can_capture)
   end
 
   def takes_steps?

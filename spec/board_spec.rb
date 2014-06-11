@@ -47,7 +47,7 @@ describe Board do
       end
     end
 
-    context "with a piece blocking the way" do
+    context "with a piece of the same color blocking the way" do
       before { board.add(piece: Rook.new, at: "b4") }
 
       context "with advancing moves" do
@@ -94,6 +94,29 @@ describe Board do
 
       context "with no piece occupying the position" do
         let(:position) { 'a4' }
+
+        it "should not be a legal move" do
+          expect(subject).to_not include(other_position)
+        end
+      end
+    end
+
+    context "with an opposing piece occupying the position" do
+      before { board.add(piece: other_piece, at: other_position) }
+      let(:other_piece) { Rook.new(side: :black) }
+      let(:other_position) { 'b4' }
+      let(:position) { 'b3' }
+
+      context "with a move that can capture" do
+        let(:piece) { Rook.new }
+
+        it "should be a legal move" do
+          expect(subject).to include(other_position)
+        end
+      end
+
+      context "with a move that cannot capture and an opposing piece" do # eg pawn advancing
+        let(:piece) { Pawn.new }
 
         it "should not be a legal move" do
           expect(subject).to_not include(other_position)
