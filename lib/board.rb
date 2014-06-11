@@ -41,6 +41,10 @@ class Board
     end.flatten
   end
 
+  def print
+    BoardPrinter.new(self).print
+  end
+
   private
 
   def is_within_bounds?(position)
@@ -62,5 +66,49 @@ class Board
       (move.requires_capture? && piece_at(move.to_s).side != piece.side) ||
       (move.can_capture? && piece_at(move.to_s).side != piece.side)
   end
+end
+
+class Board
+  def self.default_setup # this is hacky but I just don't want to look at this crappy helper method
+    board = new
+    board.add(piece: Rook.new, at: 'a1')
+    board.add(piece: Knight.new, at: 'b1')
+    board.add(piece: Bishop.new, at: 'c1')
+    board.add(piece: Queen.new, at: 'd1')
+    board.add(piece: King.new, at: 'e1')
+    board.add(piece: Bishop.new, at: 'f1')
+    board.add(piece: Knight.new, at: 'g1')
+    board.add(piece: Rook.new, at: 'h1')
+
+    board.add(piece: Pawn.new, at: 'a2')
+    board.add(piece: Pawn.new, at: 'b2')
+    board.add(piece: Pawn.new, at: 'c2')
+    board.add(piece: Pawn.new, at: 'd2')
+    board.add(piece: Pawn.new, at: 'e2')
+    board.add(piece: Pawn.new, at: 'f2')
+    board.add(piece: Pawn.new, at: 'g2')
+    board.add(piece: Pawn.new, at: 'h2')
+
+    board.add(piece: Rook.new(side: :black), at: 'a8')
+    board.add(piece: Knight.new(side: :black), at: 'b8')
+    board.add(piece: Bishop.new(side: :black), at: 'c8')
+    board.add(piece: Queen.new(side: :black), at: 'd8')
+    board.add(piece: King.new(side: :black), at: 'e8')
+    board.add(piece: Bishop.new(side: :black), at: 'f8')
+    board.add(piece: Knight.new(side: :black), at: 'g8')
+    board.add(piece: Rook.new(side: :black), at: 'h8')
+
+    board.add(piece: Pawn.new(side: :black), at: 'a7')
+    board.add(piece: Pawn.new(side: :black), at: 'b7')
+    board.add(piece: Pawn.new(side: :black), at: 'c7')
+    board.add(piece: Pawn.new(side: :black), at: 'd7')
+    board.add(piece: Pawn.new(side: :black), at: 'e7')
+    board.add(piece: Pawn.new(side: :black), at: 'f7')
+    board.add(piece: Pawn.new(side: :black), at: 'g7')
+    board.add(piece: Pawn.new(side: :black), at: 'h7')
+
+    board
+  end
+
 end
 

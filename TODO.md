@@ -1,18 +1,10 @@
-- Can't move off board - ok!
-- Can't move to occupied squares of same color - ok!
-- Pawn (et al) attacking/non-attacking moves
-- Make console - basic
-- Knights - basic
-- Bishop - basic
-- Rook - basic
-- Queen - basic
-- King - basic
+- Pawn first move, pawn en passant
+- Pawn promotion
+
 - Duplicate moves/ambiguous moves (like Rc8)
 - Capture notation? / Move notation
-- Pawn first move, pawn capture, pawn en passant
 - Can/Can't castle appropriately
 - Can't move into check
 - Detect check/checkmate
-- Pawn promotion
-- Print board - ok!
+- Detect stalemate
 
