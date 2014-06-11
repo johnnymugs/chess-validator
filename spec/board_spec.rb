@@ -33,7 +33,7 @@ describe Board do
       let(:piece) { Knight.new }
 
       it "filters out the illegal moves" do
-        expect(subject).to match_array(['a3', 'c3', 'd2'])
+        expect(subject).to match_array(%w{ a3 c3 d2 })
       end
     end
 
@@ -42,8 +42,7 @@ describe Board do
       let(:piece) { Rook.new }
 
       it "calculates moves to the end of the board" do
-        expect(subject).to match_array([ 'b1', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8',
-                                         'a2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2' ])
+        expect(subject).to match_array(%w{ b1 b3 b4 b5 b6 b7 b8 a2 c2 d2 e2 f2 g2 h2 })
       end
     end
 
@@ -55,7 +54,7 @@ describe Board do
         let(:piece) { Rook.new }
 
         it "calculates moves up to the blocking piece" do
-          expect(subject).to match_array([ 'b1', 'b3', 'a2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2' ])
+          expect(subject).to match_array(%w{ b1 b3 a2 c2 d2 e2 f2 g2 h2 })
         end
       end
 
@@ -64,7 +63,7 @@ describe Board do
         let(:piece) { Knight.new }
 
         it "filters out the illegal move" do
-          expect(subject).to match_array(['b2', 'c1', 'c5', 'e1', 'e5', 'f2', 'f4'])
+          expect(subject).to match_array(%w{ b2 c1 c5 e1 e5 f2 f4 })
         end
       end
     end

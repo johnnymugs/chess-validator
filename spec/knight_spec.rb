@@ -8,7 +8,7 @@ describe Knight do
       let(:current_position) { Position.new("f3") }
 
       it "contains the potential moves" do
-        expect(subject).to match_array([ 'g1', 'e1', 'd2', 'd4', 'h2', 'h4', 'g5', 'e5' ])
+        expect(subject).to match_array(%w{ g1 e1 d2 d4 h2 h4 g5 e5 })
       end
     end
   end
