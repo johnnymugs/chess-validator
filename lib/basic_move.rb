@@ -8,10 +8,6 @@ class BasicMove
     @file = file || 0
   end
 
-  def +(position)
-    Position.new(file: @file + position.file, rank: @rank + position.rank) unless takes_steps?
-  end
-
   def from_position(position, step: 1)
     Position.new(file: n_to_move(@file, step) + position.file, rank: n_to_move(@rank, step) + position.rank)
   end
