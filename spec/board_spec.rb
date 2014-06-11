@@ -68,6 +68,38 @@ describe Board do
         end
       end
     end
+
+    context "with a move that requires capture" do # eg pawn capture
+      before { board.add(piece: other_piece, at: other_position) }
+      let(:piece) { Pawn.new }
+      let(:other_piece) { Rook.new }
+      let(:other_position) { 'b4' }
+
+      context "with an opposing piece occupying the position" do
+        let(:other_piece) { Rook.new(side: :black) }
+        let(:position) { 'a3' }
+
+        it "should be a legal move" do
+          expect(subject).to include(other_position)
+        end
+      end
+
+      context "with a piece of the same color occupying the position" do
+        let(:position) { 'a3' }
+
+        it "should not be a legal move" do
+          expect(subject).to_not include(other_position)
+        end
+      end
+
+      context "with no piece occupying the position" do
+        let(:position) { 'a4' }
+
+        it "should not be a legal move" do
+          expect(subject).to_not include(other_position)
+        end
+      end
+    end
   end
 end
 

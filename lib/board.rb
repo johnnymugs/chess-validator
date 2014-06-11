@@ -24,7 +24,7 @@ class Board
       step = 1
       loop do
         next_move = move.from_position(piece_position, step: step)
-        break unless is_within_bounds?(next_move) && !piece_at(next_move.to_s)
+        break unless is_within_bounds?(next_move) && can_occupy_position?(piece, next_move)
         legal_moves << next_move
         break unless move.takes_steps?
         step += 1
@@ -54,6 +54,11 @@ class Board
 
   def position_for_piece(piece)
     @pieces.map{ |k,v| Position.new(k) if v == piece }.first || raise(RuntimeError.new("Piece not found on board"))
+  end
+
+  def can_occupy_position?(piece, move)
+    !piece_at(move.to_s) ||
+      (move.requires_capture? && piece_at(move.to_s).side != piece.side)
   end
 end
 
