@@ -89,6 +89,35 @@ describe Game do
     end
   end
 
+  describe "#stalemate?" do
+    subject { game.stalemate? }
+    before { game.board.add(piece: King.new(side: :white), at: 'a1') }
+    let(:game) { Game.new }
+
+    context "when there are legal moves available" do
+      before { game.board.add(piece: Rook.new(side: :black), at: 'a8') }
+      it { should be_falsy }
+    end
+
+    context "when the king is in checkmate" do
+      before do
+        game.board.add(piece: Queen.new(side: :black), at: 'a8')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+      end
+      it { should be_falsy }
+    end
+
+    context "when there are no legal moves but the king is not in checkmate" do
+      before do
+        game.board.add(piece: Queen.new(side: :black), at: 'a8')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+        game.board.add(piece: Bishop.new(side: :black), at: 'a2')
+      end
+
+      it { should be_truthy }
+    end
+  end
+
   describe "#legal_moves" do
     let(:game) { Game.new(default: true) }
 

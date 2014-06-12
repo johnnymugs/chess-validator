@@ -29,6 +29,10 @@ class Game
     check? && !legal_moves.any?
   end
 
+  def stalemate?
+    !(check? || legal_moves.any?)
+  end
+
   private
 
   def next_turn
