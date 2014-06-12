@@ -23,16 +23,16 @@ describe Board do
     end
   end
 
-  describe "#legal_moves_for_piece" do
+  describe "#possible_moves_for_piece" do
     before { board.add(piece: piece, at: position) }
-    subject { board.legal_moves_for_piece(board.piece_at(position)).map(&:to_s) }
+    subject { board.possible_moves_for_piece(board.piece_at(position)).map(&:to_s) }
     let(:board) { Board.new }
 
     context "when basic moves would move off the board" do
       let(:position) { "b1" }
       let(:piece) { Knight.new }
 
-      it "filters out the illegal moves" do
+      it "filters out the out of bounds moves" do
         expect(subject).to match_array(%w{ a3 c3 d2 })
       end
     end
@@ -62,7 +62,7 @@ describe Board do
         let(:position) { "d3" }
         let(:piece) { Knight.new }
 
-        it "filters out the illegal move" do
+        it "filters out the move" do
           expect(subject).to match_array(%w{ b2 c1 c5 e1 e5 f2 f4 })
         end
       end
@@ -78,7 +78,7 @@ describe Board do
         let(:other_piece) { Rook.new(side: :black) }
         before { board.add(piece: other_piece, at: other_position) }
 
-        it "should be a legal move" do
+        it "should be a possible move" do
           expect(subject).to include(other_position)
         end
       end
@@ -86,7 +86,7 @@ describe Board do
       context "with a piece of the same color occupying the position" do
         before { board.add(piece: other_piece, at: other_position) }
 
-        it "should not be a legal move" do
+        it "should not be a possible move" do
           expect(subject).to_not include(other_position)
         end
       end
@@ -94,7 +94,7 @@ describe Board do
       context "with no piece occupying the position" do
         before { expect(board.piece_at(other_position)).to be_nil }
 
-        it "should not be a legal move" do
+        it "should not be a possible move" do
           expect(subject).to_not include(other_position)
         end
       end
@@ -109,7 +109,7 @@ describe Board do
       context "with a move that can capture" do
         let(:piece) { Rook.new }
 
-        it "should be a legal move" do
+        it "should be a possible move" do
           expect(subject).to include(other_position)
         end
       end
@@ -117,15 +117,15 @@ describe Board do
       context "with a move that cannot capture and an opposing piece" do # eg pawn advancing
         let(:piece) { Pawn.new }
 
-        it "should not be a legal move" do
+        it "should not be a possible move" do
           expect(subject).to_not include(other_position)
         end
       end
     end
   end
 
-  describe "#legal_moves_for" do
-    subject { board.legal_moves_for(side).map(&:to_s) }
+  describe "#possible_moves_for" do
+    subject { board.possible_moves_for(side).map(&:to_s) }
     let(:board) { Board.new }
     let(:white_rook) { Rook.new(side: :white) }
     let(:black_rook) { Rook.new(side: :black) }
@@ -139,7 +139,7 @@ describe Board do
       let(:side) { :white }
 
       it "only includes white pieces" do
-        expect(subject).to match_array(board.legal_moves_for_piece(white_rook).map(&:to_s))
+        expect(subject).to match_array(board.possible_moves_for_piece(white_rook).map(&:to_s))
       end
     end
 
@@ -147,7 +147,7 @@ describe Board do
       let(:side) { :black }
 
       it "only includes black pieces" do
-        expect(subject).to match_array(board.legal_moves_for_piece(black_rook).map(&:to_s))
+        expect(subject).to match_array(board.possible_moves_for_piece(black_rook).map(&:to_s))
       end
     end
   end

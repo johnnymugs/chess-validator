@@ -16,29 +16,29 @@ class Board
     @pieces[at] = piece
   end
 
-  def legal_moves_for_piece(piece, at_position:nil)
+  def possible_moves_for_piece(piece, at_position:nil)
     piece_position = at_position || position_for_piece(piece)
 
-    legal_moves = []
+    possible_moves = []
     piece.basic_moves.each do |move|
       step = 1
       loop do
         next_move = move.from_position(piece_position, step: step)
         break unless is_within_bounds?(next_move) && can_occupy_position?(piece, next_move)
-        legal_moves << next_move
+        possible_moves << next_move
         break if piece_at(next_move)
         break unless move.takes_steps?
         step += 1
       end
     end
 
-    legal_moves
+    possible_moves
   end
 
-  def legal_moves_for(side)
+  def possible_moves_for(side)
     @pieces
     .select { |position, piece| piece.side == side }
-    .map { |position, piece| legal_moves_for_piece(piece, at_position: Position.new(position)) }
+    .map { |position, piece| possible_moves_for_piece(piece, at_position: Position.new(position)) }
     .flatten
   end
 
