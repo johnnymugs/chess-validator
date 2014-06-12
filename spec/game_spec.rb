@@ -38,18 +38,54 @@ describe Game do
     end
     let(:game) { Game.new }
 
-    context "when neither white nor black is in check" do
-      it { should be_falsy }
-    end
-
     context "when white is in check" do
-      before { game.board.add(piece: Rook.new(side: :black), at: 'a7') }
+      before do
+        expect(game.turn).to eq(:white)
+        game.board.add(piece: Rook.new(side: :black), at: 'a7')
+      end
       it { should be_truthy }
     end
 
     context "when black is in check" do
-      before { game.board.add(piece: Rook.new(side: :white), at: 'a7') }
+      before do
+        game.move!
+        expect(game.turn).to eq(:black)
+        game.board.add(piece: Rook.new(side: :white), at: 'a7')
+      end
       it { should be_truthy }
+    end
+  end
+
+  describe "#checkmate?" do
+    subject { game.checkmate? }
+    before { game.board.add(piece: King.new(side: :white), at: 'a1') }
+    let(:game) { Game.new }
+
+    context "when the king is not under attack" do
+      it { should be_falsy }
+    end
+
+    context "when the king is under attack but has moves left" do
+      before { game.board.add(piece: Rook.new(side: :black), at: 'a8') }
+      it { should be_falsy }
+    end
+
+    context "when the king is under attack and cannot escape" do
+      before do
+        game.board.add(piece: Queen.new(side: :black), at: 'a8')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+      end
+      it { should be_truthy }
+    end
+
+    context "when the king is in stalemate" do
+      before do
+        game.board.add(piece: Queen.new(side: :black), at: 'a8')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+        game.board.add(piece: Bishop.new(side: :black), at: 'a2')
+      end
+
+      it { should be_falsy }
     end
   end
 

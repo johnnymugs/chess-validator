@@ -9,16 +9,14 @@ class Game
   end
 
   def move!
-    @turn = @turn == :white ? :black : :white
+    @turn = next_turn
   end
 
   def check?
-    board.possible_moves_for(:black).include?(board.king_position(:white)) ||
-      board.possible_moves_for(:white).include?(board.king_position(:black))
+    board.possible_moves_for(next_turn).include?(board.king_position(turn))
   end
 
   def legal_moves
-    next_turn = @turn == :white ? :black : :white
     board.possible_moves_for(turn)
     .select do |move|
       tempboard = @board.dupe
@@ -27,7 +25,15 @@ class Game
     end
   end
 
+  def checkmate?
+    check? && !legal_moves.any?
+  end
+
   private
+
+  def next_turn
+    @turn == :white ? :black : :white
+  end
 
   def set_up_default_board
     @board.add(piece: Rook.new, at: 'a1')
