@@ -62,7 +62,7 @@ class Board
     Position.new(position)
   end
 
-  def print
+  def to_s
     BoardPrinter.new(self).print
   end
 
