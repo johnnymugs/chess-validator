@@ -58,7 +58,9 @@ class Board
   end
 
   def position_for_piece(piece)
-    @pieces.map{ |k,v| Position.new(k) if v == piece }.first || raise(RuntimeError.new("Piece not found on board"))
+    position = nil
+    @pieces.each { |k,v| position = Position.new(k) if v == piece }
+    position || raise(RuntimeError.new("Piece not found on board"))
   end
 
   def can_occupy_position?(piece, move)
