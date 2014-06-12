@@ -1,10 +1,11 @@
 class Game
   attr_reader :board, :turn
 
-  def initialize
+  def initialize(default: false)
     @turn = :white
+    @board = Board.new
 
-    set_up_default_board
+    set_up_default_board if default
   end
 
   def move
@@ -14,7 +15,6 @@ class Game
   private
 
   def set_up_default_board
-    @board = Board.new
     @board.add(piece: Rook.new, at: 'a1')
     @board.add(piece: Knight.new, at: 'b1')
     @board.add(piece: Bishop.new, at: 'c1')
