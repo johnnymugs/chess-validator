@@ -20,6 +20,19 @@ describe Pawn do
         expect(subject).to_not include("a4")
       end
     end
+
+    context "when the pawn is white" do
+      let(:pawn) { Pawn.new(side: :white) }
+      let(:current_position) { Position.new('b2') }
+      it { should match_array(%w{ b3 b4 a3 c3 }) }
+    end
+
+    context "when the pawn is black" do
+      let(:pawn) { Pawn.new(side: :black) }
+      let(:current_position) { Position.new('b7') }
+
+      it { should match_array(%w{ b6 b5 a6 c6 }) }
+    end
   end
 end
 
