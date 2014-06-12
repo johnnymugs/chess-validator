@@ -1,10 +1,10 @@
 class Rook < Piece
   def basic_moves
     [
-      BasicMove.new(file: '+n', rank: 0),
-      BasicMove.new(file: '-n', rank: 0),
-      BasicMove.new(file: 0, rank: '+n'),
-      BasicMove.new(file: 0, rank: '-n')
+      BasicMove.new(file: '+n', rank: 0, piece: self),
+      BasicMove.new(file: '-n', rank: 0, piece: self),
+      BasicMove.new(file: 0, rank: '+n', piece: self),
+      BasicMove.new(file: 0, rank: '-n', piece: self),
     ]
   end
 

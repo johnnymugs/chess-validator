@@ -1,10 +1,10 @@
 class Bishop < Piece
   def basic_moves
     [
-      BasicMove.new(rank: '+n', file: '+n'),
-      BasicMove.new(rank: '+n', file: '-n'),
-      BasicMove.new(rank: '-n', file: '-n'),
-      BasicMove.new(rank: '-n', file: '+n')
+      BasicMove.new(rank: '+n', file: '+n', piece: self),
+      BasicMove.new(rank: '+n', file: '-n', piece: self),
+      BasicMove.new(rank: '-n', file: '-n', piece: self),
+      BasicMove.new(rank: '-n', file: '+n', piece: self)
     ]
   end
 
