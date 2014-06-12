@@ -42,6 +42,13 @@ class Board
     .flatten
   end
 
+  def king_position(side)
+    position = @pieces
+    .detect { |position, piece| piece.side == side && piece.to_notation == King.new.to_notation }
+    .first # the key/position
+    Position.new(position)
+  end
+
   def print
     BoardPrinter.new(self).print
   end

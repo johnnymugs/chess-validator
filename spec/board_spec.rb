@@ -151,5 +151,33 @@ describe Board do
       end
     end
   end
+
+  describe "#king_position" do
+    subject { board.king_position(side).to_s }
+    let(:white_position) { 'c4' }
+    let(:black_position) { 'd8' }
+    let(:board) { Board.new }
+
+    before do
+      board.add(piece: King.new(side: :white), at: white_position)
+      board.add(piece: King.new(side: :black), at: black_position)
+    end
+
+    context "white side" do
+      let(:side) { :white }
+
+      it "indicates the white king's position" do
+        expect(subject).to eq(white_position)
+      end
+    end
+
+    context "black side" do
+      let(:side) { :black }
+
+      it "indicates the black king's position" do
+        expect(subject).to eq(black_position)
+      end
+    end
+  end
 end
 
