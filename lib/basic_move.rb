@@ -12,7 +12,7 @@ class BasicMove
   end
 
   def from_position(position, step: 1)
-    LegitMove.new(file: n_to_move(@file, step) + position.file,
+    PossibleMove.new(file: n_to_move(@file, step) + position.file,
                   rank: n_to_move(@rank, step) + position.rank,
                   requires_capture: @requires_capture,
                   can_capture: @can_capture,

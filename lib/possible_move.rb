@@ -1,4 +1,4 @@
-class LegitMove < Position
+class PossibleMove < Position
   def initialize(rank:, file:, requires_capture: false, can_capture: true, piece:)
     @requires_capture = requires_capture
     @can_capture = can_capture
