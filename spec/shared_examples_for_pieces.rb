@@ -3,6 +3,10 @@ shared_examples_for "a piece" do
     expect(described_class.new.to_s.size).to equal(1)
   end
 
+  it "should have a notation representation" do # empty string in the case of pawns
+    expect { described_class.new.to_notation }.to_not raise_error
+  end
+
   it "should have a set of basic moves" do
     expect(described_class.new.basic_moves.size).to be > 0
   end

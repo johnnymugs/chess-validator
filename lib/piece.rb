@@ -22,5 +22,9 @@ class Piece
   def moved?
     @moved
   end
+
+  def to_notation
+    self.class.to_s[0]
+  end
 end
 

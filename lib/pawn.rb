@@ -12,5 +12,9 @@ class Pawn < Piece
   def to_s
     @side == :white ? "\u2659" : "\u265F"
   end
+
+  def to_notation
+    ""
+  end
 end
 

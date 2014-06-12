@@ -15,5 +15,9 @@ class Knight < Piece
   def to_s
     @side == :white ? "\u2658" : "\u265E"
   end
+
+  def to_notation
+    "N"
+  end
 end
 
