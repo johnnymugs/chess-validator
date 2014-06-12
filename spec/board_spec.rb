@@ -23,9 +23,9 @@ describe Board do
     end
   end
 
-  describe "#legal_moves_for" do
+  describe "#legal_moves_for_piece" do
     before { board.add(piece: piece, at: position) }
-    subject { board.legal_moves_for(board.piece_at(position)).map(&:to_s) }
+    subject { board.legal_moves_for_piece(board.piece_at(position)).map(&:to_s) }
     let(:board) { Board.new }
 
     context "when basic moves would move off the board" do
@@ -120,6 +120,34 @@ describe Board do
         it "should not be a legal move" do
           expect(subject).to_not include(other_position)
         end
+      end
+    end
+  end
+
+  describe "#legal_moves_for" do
+    subject { board.legal_moves_for(side).map(&:to_s) }
+    let(:board) { Board.new }
+    let(:white_rook) { Rook.new(side: :white) }
+    let(:black_rook) { Rook.new(side: :black) }
+
+    before do
+      board.add(piece: white_rook, at: "a1")
+      board.add(piece: black_rook, at: "a8")
+    end
+
+    context "white side" do
+      let(:side) { :white }
+
+      it "only includes white pieces" do
+        expect(subject).to match_array(board.legal_moves_for_piece(white_rook).map(&:to_s))
+      end
+    end
+
+    context "black side" do
+      let(:side) { :black }
+
+      it "only includes black pieces" do
+        expect(subject).to match_array(board.legal_moves_for_piece(black_rook).map(&:to_s))
       end
     end
   end

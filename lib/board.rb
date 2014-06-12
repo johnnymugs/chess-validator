@@ -16,7 +16,7 @@ class Board
     @pieces[at] = piece
   end
 
-  def legal_moves_for(piece, at_position:nil)
+  def legal_moves_for_piece(piece, at_position:nil)
     piece_position = at_position || position_for_piece(piece)
 
     legal_moves = []
@@ -35,10 +35,11 @@ class Board
     legal_moves
   end
 
-  def legal_moves
-    @pieces.map do |position, piece|
-      legal_moves_for(piece, at_position: Position.new(position))
-    end.flatten
+  def legal_moves_for(side)
+    @pieces
+    .select { |position, piece| piece.side == side }
+    .map { |position, piece| legal_moves_for_piece(piece, at_position: Position.new(position)) }
+    .flatten
   end
 
   def print
