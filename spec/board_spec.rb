@@ -179,5 +179,21 @@ describe Board do
       end
     end
   end
+
+  describe "#dupe" do
+    let(:board) { Board.new }
+    subject { board.dupe }
+
+    before do
+      board.add(piece: Knight.new, at: 'a1')
+      board.add(piece: King.new(side: :black), at: 'h4')
+    end
+
+    it "makes a copy of the board" do
+      expect(subject).to_not equal(board)
+      expect(subject.piece_at('a1').to_notation).to eq('N')
+      expect(subject.piece_at('h4').to_notation).to eq('K')
+    end
+  end
 end
 

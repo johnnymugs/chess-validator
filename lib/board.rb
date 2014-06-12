@@ -5,6 +5,14 @@ class Board
     @pieces = {}
   end
 
+  def dupe
+    new_board = Board.new
+    @pieces.each do |position, piece|
+      new_board.add(piece: piece, at: position)
+    end
+    new_board
+  end
+
   def piece_at(position)
     @pieces[position]
   end
