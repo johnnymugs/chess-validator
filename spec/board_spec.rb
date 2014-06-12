@@ -195,5 +195,40 @@ describe Board do
       expect(subject.piece_at('h4').to_notation).to eq('K')
     end
   end
+
+  describe "#move!" do
+    let(:board) { Board.new }
+    let(:dest) { 'c2' }
+
+    subject { -> { board.move!(origin, dest) } }
+
+    before { board.add(piece: Knight.new, at: 'a1') }
+
+    context "when the original position is occupied" do
+      let(:origin) { 'a1' }
+
+      it { should change { board.piece_at(origin) }.to(nil) }
+      it { should change { board.piece_at(dest) }.from(nil) }
+      it "moves the piece" do
+        subject.call
+        expect(board.piece_at(dest).to_notation).to eq('N')
+      end
+    end
+
+    context "when the destination position is occupied" do
+      let(:origin) { 'a1' }
+
+      before { board.add(piece: Rook.new(side: :black), at: dest) }
+
+      it { should change { board.piece_at(origin) }.to(nil) }
+      it { should change { board.piece_at(dest).to_notation }.to('N').from('R') }
+    end
+
+    context "when the original position is not occupied" do
+      let(:origin) { 'a2' }
+
+      it { should raise_error }
+    end
+  end
 end
 

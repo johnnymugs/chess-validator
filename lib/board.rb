@@ -17,6 +17,11 @@ class Board
     @pieces[position]
   end
 
+  def move!(origin, dest)
+    raise RuntimeError.new("Nothing at #{ origin }") if @pieces[origin].nil?
+    @pieces[dest] = @pieces.delete(origin)
+  end
+
   def add(piece:, at:)
     raise RuntimeError.new("#{at} is not a valid position") unless is_valid_position?(at)
     raise RuntimeError.new("There is already a piece at #{at}") unless @pieces[at].nil?

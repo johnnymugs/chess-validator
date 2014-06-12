@@ -16,7 +16,8 @@ class BasicMove
                   rank: n_to_move(@rank, step) + position.rank,
                   requires_capture: @requires_capture,
                   can_capture: @can_capture,
-                  piece: @piece)
+                  piece: @piece,
+                  origin: position)
   end
 
   def takes_steps?
