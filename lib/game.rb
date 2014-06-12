@@ -8,7 +8,7 @@ class Game
     set_up_default_board if default
   end
 
-  def move
+  def move!
     @turn = @turn == :white ? :black : :white
   end
 
