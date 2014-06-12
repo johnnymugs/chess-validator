@@ -13,7 +13,6 @@ describe BoardPrinter do
       "3         \n" +
       "2 \u2659       \n" +
       "1 \u2656\u2658\u2657\u2655\u2654   \n" +
-      "          \n" +
       "  abcdefgh\n"
     end
 

@@ -13,14 +13,7 @@ class BoardPrinter
       end
       output << "\n"
     end
-    output << footer
-  end
-
-  private
-
-  def footer
-    "          \n" +
-    "  abcdefgh\n"
+    output << "  abcdefgh\n"
   end
 end
 
