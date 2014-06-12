@@ -69,14 +69,14 @@ describe Board do
     end
 
     context "with a move that requires capture" do # eg pawn capture
-      before { board.add(piece: other_piece, at: other_position) }
       let(:piece) { Pawn.new }
+      let(:position) { 'a3' }
       let(:other_piece) { Rook.new }
       let(:other_position) { 'b4' }
 
       context "with an opposing piece occupying the position" do
         let(:other_piece) { Rook.new(side: :black) }
-        let(:position) { 'a3' }
+        before { board.add(piece: other_piece, at: other_position) }
 
         it "should be a legal move" do
           expect(subject).to include(other_position)
@@ -84,7 +84,7 @@ describe Board do
       end
 
       context "with a piece of the same color occupying the position" do
-        let(:position) { 'a3' }
+        before { board.add(piece: other_piece, at: other_position) }
 
         it "should not be a legal move" do
           expect(subject).to_not include(other_position)
@@ -92,7 +92,7 @@ describe Board do
       end
 
       context "with no piece occupying the position" do
-        let(:position) { 'a4' }
+        before { expect(board.piece_at(other_position)).to be_nil }
 
         it "should not be a legal move" do
           expect(subject).to_not include(other_position)

@@ -65,9 +65,11 @@ class Board
   end
 
   def can_occupy_position?(piece, move)
-    !piece_at(move.to_s) ||
-      (move.requires_capture? && piece_at(move.to_s).side != piece.side) ||
-      (move.can_capture? && piece_at(move.to_s).side != piece.side)
+    if other_piece = piece_at(move.to_s)
+      move.can_capture? && other_piece.side != piece.side
+    else
+      !move.requires_capture?
+    end
   end
 end
 
