@@ -52,5 +52,40 @@ describe Game do
       it { should be_truthy }
     end
   end
+
+  describe "#legal_moves" do
+    let(:game) { Game.new(default: true) }
+
+    context "when it's white's turn" do
+      before { expect(game.turn).to eq(:white) }
+
+      it "should be the board's possible moves for white" do
+        expect(game.legal_moves).to eq(game.board.possible_moves_for(:white))
+      end
+    end
+
+    context "when it's black's turn" do
+      before do
+        game.move!
+        expect(game.turn).to eq(:black)
+      end
+
+      it "should be the board's possible moves for black" do
+        expect(game.legal_moves).to eq(game.board.possible_moves_for(:black))
+      end
+    end
+
+    context "with a move that would put the king in check" do
+      let(:game) { Game.new }
+      before do
+        game.board.add(piece: King.new(side: :white), at: 'a1')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+      end
+
+      it "should not include the move in the list of legal moves" do
+        expect(game.legal_moves.map(&:to_s)).to_not include('b1')
+      end
+    end
+  end
 end
 

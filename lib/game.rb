@@ -17,6 +17,16 @@ class Game
       board.possible_moves_for(:white).include?(board.king_position(:black))
   end
 
+  def legal_moves
+    next_turn = @turn == :white ? :black : :white
+    board.possible_moves_for(turn)
+    .select do |move|
+      tempboard = @board.dupe
+      tempboard.move!(move.origin, move.dest)
+      !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
+    end
+  end
+
   private
 
   def set_up_default_board
