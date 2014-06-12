@@ -12,6 +12,11 @@ class Game
     @turn = @turn == :white ? :black : :white
   end
 
+  def check?
+    board.possible_moves_for(:black).include?(board.king_position(:white)) ||
+      board.possible_moves_for(:white).include?(board.king_position(:black))
+  end
+
   private
 
   def set_up_default_board

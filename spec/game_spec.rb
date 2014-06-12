@@ -30,5 +30,28 @@ describe Game do
       end
     end
   end
+
+  describe "#check?" do
+    subject { game.check? }
+    before do
+      game.board.add(piece: King.new(side: :white), at: 'a1')
+      game.board.add(piece: King.new(side: :black), at: 'a8')
+    end
+    let(:game) { Game.new }
+
+    context "when neither white nor black is in check" do
+      it { should be_falsy }
+    end
+
+    context "when white is in check" do
+      before { game.board.add(piece: Rook.new(side: :black), at: 'a7') }
+      it { should be_truthy }
+    end
+
+    context "when black is in check" do
+      before { game.board.add(piece: Rook.new(side: :white), at: 'a7') }
+      it { should be_truthy }
+    end
+  end
 end
 
