@@ -17,7 +17,7 @@ describe MoveParser do
     end
 
     context "with well-formed double digit input" do
-      let(:input) { '11. e4 e5 12. Nf3 Nc6 13. Bb5' }
+      let(:input) { '10. e4 e5 11. Nf3 Nc6 12. Bb5' }
       it { should change { parsed_moves }.to(['e4','e5', 'Nf3', 'Nc6', 'Bb5']) }
       it { should change { parser.moves }.to(['e4','e5', 'Nf3', 'Nc6', 'Bb5']) }
 

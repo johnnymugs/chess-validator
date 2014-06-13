@@ -12,7 +12,7 @@ class MoveParser
       # read move number, either one or two digits (eg '1. ', '23. ')
       raise ArgumentError unless ('1'..'9').include?(@unparsed_moves[i])
       i += 1
-      i += ('1'..'9').include?(@unparsed_moves[i]) ? 3 : 2
+      i += ('0'..'9').include?(@unparsed_moves[i]) ? 3 : 2
 
       # read white move
       move = ""
