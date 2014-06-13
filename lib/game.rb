@@ -1,6 +1,14 @@
 class Game
   attr_reader :board, :turn
 
+  def self.load_from_moves(moves)
+    game = self.new(default: true)
+    MoveParser.new(moves).parse do |move|
+      game.move!(move)
+    end
+    game
+  end
+
   def initialize(default: false)
     @turn = :white
     @board = Board.new
@@ -14,7 +22,7 @@ class Game
       @board.move!(move.origin, move.dest)
       @legal_moves = nil
     else
-      raise RuntimeError.new("Invalid move!")
+      raise RuntimeError.new("Invalid move! (#{move_in_notation})")
     end
   end
 
