@@ -181,6 +181,63 @@ describe Game do
 
         it { should include('Rxb4') }
       end
+
+      context "with ambiguous moves" do
+        context "with two pieces on different files" do
+          before do
+            game.board.add(piece: Rook.new, at: 'a4')
+            game.board.add(piece: Rook.new, at: 'h4')
+            game.board.add(piece: Knight.new, at: 'a6')
+          end
+
+          it "should include the file of departure" do
+            expect(subject).to include('Rab4')
+            expect(subject).to include('Rhb4')
+          end
+
+          it "should not include the file of departure for pieces that are already unambiguous" do
+            expect(subject).to_not include('Nab4')
+            expect(subject).to include('Nb4')
+          end
+        end
+
+        context "with two pieces on the same file" do
+          before do
+            game.board.add(piece: Rook.new, at: 'c1')
+            game.board.add(piece: Rook.new, at: 'c8')
+            game.board.add(piece: Knight.new, at: 'd3')
+          end
+
+          it "should include the rank of departure" do
+            expect(subject).to include('R1c5')
+            expect(subject).to include('R8c5')
+          end
+
+          it "should not include the rank of departure for pieces that are already unambiguous" do
+            expect(subject).to_not include('N3c5')
+            expect(subject).to include('Nc5')
+          end
+        end
+
+        context "in rare instances when rank or file alone will not sufficiently disambiguate" do
+          before do
+            game.board.add(piece: Queen.new, at: 'c8')
+            game.board.add(piece: Queen.new, at: 'd8')
+            game.board.add(piece: Queen.new, at: 'e8')
+            game.board.add(piece: Queen.new, at: 'a7')
+          end
+
+          it "includes both rank and file" do
+            expect(subject).to include('Qc8d7')
+            expect(subject).to include('Qd8d7')
+            expect(subject).to include('Qe8d7')
+          end
+
+          it "should not include both rank and file for moves which are otherwise unambiguous"
+            # expect(subject).to_not include('Qa7d7')
+            # expect(subject).to include('Qad7')
+        end
+      end
     end
   end
 end

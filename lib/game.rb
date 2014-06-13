@@ -25,6 +25,7 @@ class Game
     end
 
     assign_notation(moves)
+    clarify_ambiguity(moves)
   end
 
   def checkmate?
@@ -42,6 +43,31 @@ class Game
       move.notation = move.piece.to_notation +
         (board.piece_at(move.dest).nil? ? '' : 'x') +
         move.dest
+    end
+  end
+
+  def clarify_ambiguity(moves)
+    moves.each do |move|
+      dupes = moves.select { |other_move| other_move.to_notation == move.to_notation }
+      case dupes.size
+      when 1
+        # no dupes, do nothing
+      when 2
+        if dupes.first.origin[0] != dupes.last.origin[0] # compare file
+          dupes.first.notation = move.piece.to_notation + dupes.first.origin[0] + (board.piece_at(move.dest).nil? ? '' : 'x') + move.dest
+          dupes.last.notation = move.piece.to_notation + dupes.last.origin[0] + (board.piece_at(move.dest).nil? ? '' : 'x') + move.dest
+        else # use rank to disambiguate
+          dupes.first.notation = move.piece.to_notation + dupes.first.origin[1] + (board.piece_at(move.dest).nil? ? '' : 'x') + move.dest
+          dupes.last.notation = move.piece.to_notation + dupes.last.origin[1] + (board.piece_at(move.dest).nil? ? '' : 'x') + move.dest
+        end
+      else # 3 or more ambiguous pieces, this can only happen with rare multiple pawn promotion (!!!)
+        dupes.each do |move|
+          move.notation = move.piece.to_notation +
+            move.origin +
+            (board.piece_at(move.dest).nil? ? '' : 'x') +
+            move.dest
+        end
+      end
     end
   end
 
