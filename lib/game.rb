@@ -12,6 +12,7 @@ class Game
     if move = find_move_by_notation(move_in_notation)
       @turn = next_turn
       @board.move!(move.origin, move.dest)
+      @legal_moves = nil
     else
       raise RuntimeError.new("Invalid move!")
     end
@@ -32,15 +33,7 @@ class Game
   end
 
   def legal_moves
-    moves = board.possible_moves_for(turn)
-    .select do |move|
-      tempboard = @board.dupe
-      tempboard.move!(move.origin, move.dest)
-      !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
-    end
-
-    assign_notation(moves)
-    clarify_ambiguity(moves)
+    @legal_moves ||= calculate_legal_moves
   end
 
   def checkmate?
@@ -52,6 +45,19 @@ class Game
   end
 
   private
+
+  def calculate_legal_moves
+    moves = board.possible_moves_for(turn)
+    .select do |move|
+      tempboard = @board.dupe
+      tempboard.move!(move.origin, move.dest)
+      !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
+    end
+
+    assign_notation(moves)
+    clarify_ambiguity(moves)
+  end
+
 
   def assign_notation(moves)
     moves.each do |move|
