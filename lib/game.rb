@@ -61,8 +61,11 @@ class Game
 
   def assign_notation(moves)
     moves.each do |move|
-      move.notation = move.piece.to_notation +
-        (board.piece_at(move.dest).nil? ? '' : 'x') +
+      capture = board.piece_at(move.dest) ? true : false
+      piece_notation = (capture && move.piece.is_a?(Pawn)) ? move.origin[0] : move.piece.to_notation
+      move.notation =
+        piece_notation +
+        (capture ? 'x' : '') +
         move.dest
     end
   end

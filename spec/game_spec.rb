@@ -171,6 +171,15 @@ describe Game do
         it { should include('Rxb4') }
       end
 
+      context "with a pawn capture" do
+        before do
+          game.board.add(piece: Pawn.new, at: 'b2')
+          game.board.add(piece: Pawn.new(side: :black), at: 'c3')
+        end
+
+        it { should include('bxc3') } # include file in notation
+      end
+
       context "with ambiguous moves" do
         context "with two pieces on different files" do
           before do
