@@ -8,12 +8,23 @@ class Game
     set_up_default_board if default
   end
 
-  def move!
-    @turn = next_turn
+  def move!(move_in_notation)
+    if move = find_move_by_notation(move_in_notation)
+      @turn = next_turn
+      @board.move!(move.origin, move.dest)
+    else
+      raise RuntimeError.new("Invalid move!")
+    end
   end
 
   def can_move?(move)
     legal_moves.map(&:to_notation).include?(move)
+  end
+
+  def ambiguous_move_matches_for(move)
+    legal_moves
+    .select { |legal_move| move[-2..-1] == legal_move.to_s }
+    .map(&:to_notation)
   end
 
   def check?
@@ -77,6 +88,10 @@ class Game
 
   def next_turn
     @turn == :white ? :black : :white
+  end
+
+  def find_move_by_notation(move_in_notation)
+    legal_moves.detect { |move| move.to_notation == move_in_notation }
   end
 
   def set_up_default_board

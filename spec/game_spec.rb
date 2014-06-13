@@ -9,25 +9,14 @@ describe Game do
     end
   end
 
-  describe "#move" do
-    before { game.move! }
+  describe "#move!" do
+    subject { -> { game.move!(move) } }
+    let(:game) { Game.new(default: true) }
+    let(:move) { 'e4' }
 
-    context "when it's white's move" do
-      it "changes the turn to black" do
-        expect(game.turn).to equal(:black)
-      end
-    end
-
-    context "when it's black's move" do
-      before do
-        expect(game.turn).to equal(:black)
-        game.move!
-      end
-
-      it "changes the turn to white" do
-        expect(game.turn).to equal(:white)
-      end
-    end
+    it { should change { game.turn }.from(:white).to(:black) }
+    it { should change { game.legal_moves.map(&:to_s) } }
+    it { should change { game.board.piece_at('e2') } }
   end
 
   describe "#check?" do
@@ -48,9 +37,9 @@ describe Game do
 
     context "when black is in check" do
       before do
-        game.move!
+        game.board.add(piece: Rook.new(side: :white), at: 'a6')
+        game.move!('Ra7')
         expect(game.turn).to eq(:black)
-        game.board.add(piece: Rook.new(side: :white), at: 'a7')
       end
       it { should be_truthy }
     end
@@ -131,7 +120,7 @@ describe Game do
 
     context "when it's black's turn" do
       before do
-        game.move!
+        game.move!('e4')
         expect(game.turn).to eq(:black)
       end
 
@@ -254,6 +243,20 @@ describe Game do
       let(:move) { 'e7' }
       it { should be_falsy }
     end
+  end
+
+  describe "#ambiguous_move_matches_for" do
+    subject { game.ambiguous_move_matches_for(move) }
+
+    let(:game) { Game.new }
+    let(:move) { 'c4' }
+
+    before do
+      game.board.add(piece: Rook.new, at: 'a4')
+      game.board.add(piece: Rook.new, at: 'h4')
+    end
+
+    it { should eq(['Rac4', 'Rhc4']) }
   end
 end
 
