@@ -40,7 +40,7 @@ class Board
         break unless is_within_bounds?(next_move) && can_occupy_position?(piece, next_move)
         possible_moves << next_move
         break if piece_at(next_move)
-        break unless move.takes_steps?
+        break unless (move.takes_steps? && step < move.max_steps)
         step += 1
       end
     end

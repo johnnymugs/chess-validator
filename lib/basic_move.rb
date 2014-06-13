@@ -1,14 +1,15 @@
 class BasicMove
   ASCII_OFFSET = 96
 
-  attr_reader :rank, :file
+  attr_reader :rank, :file, :max_steps
 
-  def initialize(rank: nil, file: nil, requires_capture: false, can_capture: true, piece:)
+  def initialize(rank: nil, file: nil, requires_capture: false, can_capture: true, piece:, max_steps: 8)
     @rank = rank || 0
     @file = file || 0
     @requires_capture = requires_capture
     @can_capture = can_capture
     @piece = piece
+    @max_steps = max_steps
   end
 
   def from_position(position, step: 1)

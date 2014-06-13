@@ -1,13 +1,13 @@
 class Pawn < Piece
   def basic_moves
     direction = @side == :white ? +1 : -1
-    moves = [
-      BasicMove.new(rank: 1 * direction, file: 0, can_capture: false, piece: self),
+    n_direction = @side == :white ? '+n' : '-n'
+    max_steps = moved? ? 1 : 2
+    [
+      BasicMove.new(rank: n_direction, file: 0, can_capture: false, piece: self, max_steps: max_steps),
       BasicMove.new(rank: 1 * direction, file: +1, requires_capture: true, piece: self),
       BasicMove.new(rank: 1 * direction, file: -1, requires_capture: true, piece: self)
     ]
-    moves << BasicMove.new(rank: 2 * direction, file: 0, can_capture: false, piece: self) if !moved?
-    moves
   end
 
   def to_s
