@@ -56,10 +56,10 @@ class Board
   end
 
   def king_position(side)
-    position = @pieces
-    .detect { |position, piece| piece.side == side && piece.to_notation == King.new.to_notation }
-    .first # the key/position
-    Position.new(position)
+    if position = @pieces
+      .detect { |position, piece| piece.side == side && piece.to_notation == King.new.to_notation }
+      Position.new(position.first) # detect returns an array of key (position) and val (piece)
+    end
   end
 
   def to_s
