@@ -14,7 +14,7 @@ class Board
   end
 
   def piece_at(position)
-    @pieces[position]
+    @pieces[position.to_s]
   end
 
   def move!(origin, dest)

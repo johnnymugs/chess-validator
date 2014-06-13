@@ -23,9 +23,26 @@ describe Board do
     end
   end
 
+  describe "#piece_at" do
+    subject { board.piece_at(position) }
+    before { board.add(piece: piece, at: 'a1') }
+    let(:piece) { Knight.new }
+    let(:board) { Board.new }
+
+    context "when position is given as a string" do
+      let(:position) { 'a1' }
+      it { should eq(piece) }
+    end
+
+    context "when position is given as a Position instance" do
+      let(:position) { Position.new('a1') }
+      it { should eq(piece) }
+    end
+  end
+
   describe "#possible_moves_for_piece" do
-    before { board.add(piece: piece, at: position) }
     subject { board.possible_moves_for_piece(board.piece_at(position)).map(&:to_s) }
+    before { board.add(piece: piece, at: position) }
     let(:board) { Board.new }
 
     context "when basic moves would move off the board" do
@@ -111,6 +128,10 @@ describe Board do
 
         it "should be a possible move" do
           expect(subject).to include(other_position)
+        end
+
+        it "should not include positions beyond the opposing piece" do
+          expect(subject).to_not include('b5')
         end
       end
 
