@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 require 'spec_helper'
 
-describe "a few simple moves" do
+describe "a few simple moves", integration: true do
   let(:game) { Game.load_from_moves(moves) }
   let(:moves) { '1. e4 e6 2. d4 d5 3. Nc3' }
   let(:expected_output) do
