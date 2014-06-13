@@ -151,6 +151,37 @@ describe Game do
         expect(game.legal_moves.map(&:to_s)).to_not include('b1')
       end
     end
+
+    describe "notation" do
+      subject { game.legal_moves.map(&:to_notation) }
+      let(:game) { Game.new }
+      before do
+        game.board.add(piece: King.new(side: :white), at: 'a1')
+        game.board.add(piece: Rook.new(side: :black), at: 'b8')
+      end
+
+
+      context "with a pawn" do
+        before { game.board.add(piece: Pawn.new, at: 'b2') }
+
+        it { should include('b3') }
+      end
+
+      context "with a piece" do
+        before { game.board.add(piece: Rook.new, at: 'b2') }
+
+        it { should include('Rb3') }
+      end
+
+      context "with a capture" do
+        before do
+          game.board.add(piece: Rook.new, at: 'b2')
+          game.board.add(piece: Rook.new(side: :black), at: 'b4')
+        end
+
+        it { should include('Rxb4') }
+      end
+    end
   end
 end
 

@@ -17,12 +17,14 @@ class Game
   end
 
   def legal_moves
-    board.possible_moves_for(turn)
+    moves = board.possible_moves_for(turn)
     .select do |move|
       tempboard = @board.dupe
       tempboard.move!(move.origin, move.dest)
       !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
     end
+
+    assign_notation(moves)
   end
 
   def checkmate?
@@ -34,6 +36,14 @@ class Game
   end
 
   private
+
+  def assign_notation(moves)
+    moves.each do |move|
+      move.notation = move.piece.to_notation +
+        (board.piece_at(move.dest).nil? ? '' : 'x') +
+        move.dest
+    end
+  end
 
   def next_turn
     @turn == :white ? :black : :white
