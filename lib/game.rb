@@ -12,6 +12,10 @@ class Game
     @turn = next_turn
   end
 
+  def can_move?(move)
+    legal_moves.map(&:to_notation).include?(move)
+  end
+
   def check?
     board.possible_moves_for(next_turn).include?(board.king_position(turn))
   end

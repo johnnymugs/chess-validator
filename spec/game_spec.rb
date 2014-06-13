@@ -240,5 +240,20 @@ describe Game do
       end
     end
   end
+
+  describe "#can_move?" do
+    subject { game.can_move?(move) }
+    let(:game) { Game.new(default: true) }
+
+    context "with a legal move" do
+      let(:move) { 'e4' }
+      it { should be_truthy }
+    end
+
+    context "with an illegal move" do
+      let(:move) { 'e7' }
+      it { should be_falsy }
+    end
+  end
 end
 
