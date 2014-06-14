@@ -7,6 +7,10 @@ class Piece
     @moved = moved
   end
 
+  def dupe
+    self.class.new(side: @side, moved: @moved)
+  end
+
   def basic_moves
     raise NotImplementedError
   end
