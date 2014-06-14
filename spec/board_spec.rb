@@ -227,6 +227,13 @@ describe Board do
       expect(subject.piece_at('a1').to_notation).to eq('N')
       expect(subject.piece_at('h4').to_notation).to eq('K')
     end
+
+    it "dupes the pieces" do
+      new_board = subject
+      new_board.piece_at('a1').move!
+      expect(new_board.piece_at('a1').moved?).to be_truthy
+      expect(board.piece_at('a1').moved?).to_not be_truthy
+    end
   end
 
   describe "#move!" do
