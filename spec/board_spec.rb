@@ -239,20 +239,18 @@ describe Board do
   describe "#move!" do
     let(:board) { Board.new }
     let(:dest) { 'c2' }
+    let(:piece) { Knight.new }
 
     subject { -> { board.move!(origin, dest) } }
 
-    before { board.add(piece: Knight.new, at: 'a1') }
+    before { board.add(piece: piece, at: 'a1') }
 
     context "when the original position is occupied" do
       let(:origin) { 'a1' }
 
-      it { should change { board.piece_at(origin) }.to(nil) }
-      it { should change { board.piece_at(dest) }.from(nil) }
-      it "moves the piece" do
-        subject.call
-        expect(board.piece_at(dest).to_notation).to eq('N')
-      end
+      it { should change { board.piece_at(origin) }.from(piece).to(nil) }
+      it { should change { board.piece_at(dest) }.from(nil).to(piece) }
+      it { should change { piece.moved? }.from(false).to(true) }
     end
 
     context "when the destination position is occupied" do

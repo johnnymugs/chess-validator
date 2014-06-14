@@ -20,6 +20,7 @@ class Board
   def move!(origin, dest)
     raise RuntimeError.new("Nothing at #{ origin }") if @pieces[origin].nil?
     @pieces[dest] = @pieces.delete(origin)
+    @pieces[dest].move!
   end
 
   def add(piece:, at:)
