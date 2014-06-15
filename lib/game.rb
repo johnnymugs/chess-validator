@@ -11,7 +11,7 @@ module CV
     end
 
     def self.load_from_json(json)
-      game = self.new
+      game = self.new(turn: json[:turn])
       json[:pieces].each do |piece|
         obj_piece = Object.const_get(piece[:type]).new(side: piece[:side].to_sym, moved: piece[:moved])
         game.board.add(piece: obj_piece, at: piece[:position])
@@ -19,8 +19,8 @@ module CV
       game
     end
 
-    def initialize(default: false)
-      @turn = :white
+    def initialize(default: false, turn: :white)
+      @turn = turn
       @board = Board.new
 
       set_up_default_board if default
@@ -28,6 +28,7 @@ module CV
 
     def to_json
       {
+        turn: @turn,
         pieces: @board.pieces.map do |position, piece|
           {
             type: piece.class.to_s,
