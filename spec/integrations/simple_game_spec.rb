@@ -16,8 +16,7 @@ describe "a few simple moves" do
     '  abcdefgh' + "\n"
   end
 
-  it "should run the game as expected" do
-    expect(game.board.to_s).to eq(expected_output)
-  end
+  it_should_behave_like "a valid game"
+  it_should_behave_like "a serializable game"
 end
 
