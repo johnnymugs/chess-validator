@@ -49,7 +49,7 @@ module CV
       end
     end
 
-    def can_move?(move)
+    def legal_move?(move)
       legal_moves.map(&:to_notation).include?(move)
     end
 

@@ -239,8 +239,8 @@ describe Game do
     end
   end
 
-  describe "#can_move?" do
-    subject { game.can_move?(move) }
+  describe "#legal_move?" do
+    subject { game.legal_move?(move) }
     let(:game) { Game.new(default: true) }
 
     context "with a legal move" do
