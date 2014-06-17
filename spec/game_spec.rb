@@ -149,7 +149,6 @@ describe Game do
         game.board.add(piece: Rook.new(side: :black), at: 'b8')
       end
 
-
       context "with a pawn" do
         before { game.board.add(piece: Pawn.new, at: 'b2') }
 
@@ -235,6 +234,203 @@ describe Game do
             # expect(subject).to_not include('Qa7d7')
             # expect(subject).to include('Qad7')
         end
+      end
+    end
+  end
+
+  describe "castling" do
+    let(:game) { Game.new(default: false) }
+    subject { game.legal_moves.map(&:to_notation) }
+
+    context "when it is white's turn" do
+      context "castling queenside" do
+        before do
+          game.board.add(piece: King.new, at: 'e1')
+          game.board.add(piece: Rook.new, at: 'a1')
+        end
+
+        context "when the king has moved" do
+          before { game.board.piece_at('e1').move! }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the queenside rook has moved" do
+          before { game.board.piece_at('a1').move! }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when there is a piece blocking the move" do
+          before { game.board.add(piece: Knight.new, at: 'b1') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the king is in check" do
+          before { game.board.add(piece: Rook.new(side: :black), at: 'e8') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when castling would put the king in check" do
+          before { game.board.add(piece: Rook.new(side: :black), at: 'c8') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
+          it { should include('O-O-O') }
+        end
+      end
+
+      context "castling kingside" do
+        before do
+          game.board.add(piece: King.new, at: 'e1')
+          game.board.add(piece: Rook.new, at: 'h1')
+        end
+
+        context "when the king has moved" do
+          before { game.board.piece_at('e1').move! }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the queenside rook has moved" do
+          before { game.board.piece_at('h1').move! }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when there is a piece blocking the move" do
+          before { game.board.add(piece: Knight.new, at: 'f1') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the king is in check" do
+          before { game.board.add(piece: Rook.new(side: :black), at: 'e8') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when castling would put the king in check" do
+          before { game.board.add(piece: Rook.new(side: :black), at: 'g8') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
+          it { should include('O-O') }
+        end
+      end
+
+      context "when white cannot castle but black can" do
+        before do
+          game.board.add(piece: King.new(side: :black), at: 'e8')
+          game.board.add(piece: Rook.new(side: :black), at: 'h8')
+          game.board.add(piece: King.new(moved: true), at: 'b1')
+        end
+
+        it { should_not include('O-O') }
+        it { should_not include('O-O-O') }
+      end
+    end
+
+    context "when it is black's turn" do
+      let(:game) { Game.new(turn: :black) }
+
+      context "castling queenside" do
+        before do
+          game.board.add(piece: King.new(side: :black), at: 'e8')
+          game.board.add(piece: Rook.new(side: :black), at: 'a8')
+        end
+
+        context "when the king has moved" do
+          before { game.board.piece_at('e8').move! }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the queenside rook has moved" do
+          before { game.board.piece_at('a8').move! }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when there is a piece blocking the move" do
+          before { game.board.add(piece: Knight.new(side: :black), at: 'b8') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the king is in check" do
+          before { game.board.add(piece: Rook.new, at: 'e1') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when castling would put the king in check" do
+          before { game.board.add(piece: Rook.new, at: 'c1') }
+
+          it { should_not include('O-O-O') }
+        end
+
+        context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
+          it { should include('O-O-O') }
+        end
+      end
+
+      context "castling kingside" do
+        before do
+          game.board.add(piece: King.new(side: :black), at: 'e8')
+          game.board.add(piece: Rook.new(side: :black), at: 'h8')
+        end
+
+        context "when the king has moved" do
+          before { game.board.piece_at('e8').move! }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the queenside rook has moved" do
+          before { game.board.piece_at('h8').move! }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when there is a piece blocking the move" do
+          before { game.board.add(piece: Knight.new(side: :black), at: 'f8') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the king is in check" do
+          before { game.board.add(piece: Rook.new, at: 'e1') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when castling would put the king in check" do
+          before { game.board.add(piece: Rook.new, at: 'g8') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
+          it { should include('O-O') }
+        end
+      end
+
+      context "when black cannot castle but white can" do
+        before do
+          game.board.add(piece: King.new, at: 'e1')
+          game.board.add(piece: Rook.new, at: 'h1')
+          game.board.add(piece: King.new(side: :black, moved: true), at: 'f8')
+        end
+
+        it { should_not include('O-O') }
+        it { should_not include('O-O-O') }
       end
     end
   end

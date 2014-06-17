@@ -79,20 +79,84 @@ module CV
     private
 
     def calculate_legal_moves
-      moves = board.possible_moves_for(turn)
-      .select do |move|
-        tempboard = @board.dupe
-        tempboard.move!(move.origin, move.dest)
-        !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
-      end
+      moves = board.possible_moves_for(turn) + legal_castling_moves
+      moves = filter_moves_that_result_in_check(moves)
 
       assign_notation(moves)
       clarify_ambiguity(moves)
     end
 
+    def filter_moves_that_result_in_check(moves)
+      moves.select do |move|
+        tempboard = @board.dupe
+        tempboard.move!(move.origin, move.dest)
+        if second_move = move.secondary_move # castling
+          tempboard.move!(second_move.origin, second_move.dest)
+        end
+        !tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
+      end
+    end
+
+    ### Castling ###
+    def legal_castling_moves
+      return [] if check?
+      return [] if king_moved?
+      castle_moves = []
+      castle_moves << queenside_castle if castlable_queenside_rook? && path_clear_for_queenside_castle?
+      castle_moves << kingside_castle if castlable_kingside_rook? && path_clear_for_kingside_castle?
+      castle_moves
+    end
+
+    def king_moved?
+      (king = board.piece_at(board.king_position(turn))) && king.moved?
+    end
+
+    def castlable_queenside_rook?
+      (rook = board.piece_at("a#{backrank}")) &&
+        rook.to_notation == "R" &&
+        !rook.moved?
+    end
+
+    def castlable_kingside_rook?
+      (rook = board.piece_at("h#{backrank}")) &&
+        rook.to_notation == "R" &&
+        !rook.moved?
+    end
+
+    def path_clear_for_queenside_castle?
+      !(
+        board.piece_at("b#{backrank}") ||
+        board.piece_at("c#{backrank}") ||
+        board.piece_at("d#{backrank}")
+      )
+    end
+
+    def path_clear_for_kingside_castle?
+      !(
+        board.piece_at("f#{backrank}") ||
+        board.piece_at("g#{backrank}")
+      )
+    end
+
+    def backrank
+      turn == :white ? 1 : 8
+    end
+
+    def queenside_castle
+      rook_move = PossibleMove.new(rank: backrank, file: 4, can_capture: false, origin: "a#{backrank}", piece: board.piece_at("a#{backrank}"))
+      PossibleMove.new(rank: backrank, file: 3, can_capture: false, origin: "e#{backrank}", piece: board.piece_at("e#{backrank}"), notation: 'O-O-O', secondary_move: rook_move)
+    end
+
+    def kingside_castle
+      rook_move = PossibleMove.new(rank: backrank, file: 6, can_capture: false, origin: "h#{backrank}", piece: board.piece_at("a#{backrank}"))
+      PossibleMove.new(rank: backrank, file: 7, can_capture: false, origin: "e#{backrank}", piece: board.piece_at("e#{backrank}"), notation: 'O-O', secondary_move: rook_move)
+    end
+
+    ### /castling ###
 
     def assign_notation(moves)
       moves.each do |move|
+        return move if move.notation
         capture = board.piece_at(move.dest) ? true : false
         piece_notation = (capture && move.piece.is_a?(Pawn)) ? move.origin[0] : move.piece.to_notation
         move.notation =
