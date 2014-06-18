@@ -453,6 +453,130 @@ describe Game do
     end
   end
 
+  describe "pawn promotion" do
+    subject { game.legal_moves.map(&:to_notation) }
+
+    context "when it is white's turn" do
+      before { game.board.add(piece: King.new, at: 'e4') } # for legal move calculation
+      let(:game) { Game.new(default: false) }
+
+      context "when a pawn is able to reach the back rank" do
+        before { game.board.add(piece: Pawn.new, at: 'e7') }
+
+        it "should not include the normal move" do
+          expect(subject).to_not include('e8')
+        end
+
+        it "should include the promotion to Q, R, B, and N" do
+          expect(subject).to include('e8Q')
+          expect(subject).to include('e8R')
+          expect(subject).to include('e8B')
+          expect(subject).to include('e8N')
+        end
+      end
+
+      context "when a pawn is able to reach the back rank with capture" do
+        before do
+          game.board.add(piece: Pawn.new, at: 'e7')
+          game.board.add(piece: Knight.new(side: :black), at: 'd8')
+        end
+
+        it "should not include the normal move" do
+          expect(subject).to_not include('e8')
+        end
+
+        it "should include the promotion to Q, R, B, and N" do
+          expect(subject).to include('e8Q')
+          expect(subject).to include('e8R')
+          expect(subject).to include('e8B')
+          expect(subject).to include('e8N')
+        end
+
+        it "should include the promotion to Q, R, B, and N through capture" do
+          expect(subject).to include('exd8Q')
+          expect(subject).to include('exd8R')
+          expect(subject).to include('exd8B')
+          expect(subject).to include('exd8N')
+        end
+      end
+
+      context "when a pawn is unable to reach the back rank" do
+        before do
+          game.board.add(piece: Pawn.new, at: 'e7')
+          game.board.add(piece: Knight.new(side: :black), at: 'e8')
+        end
+
+        it "should not include promotion moves" do
+          expect(subject).to_not include('e8')
+          expect(subject).to_not include('e8Q')
+          expect(subject).to_not include('e8R')
+          expect(subject).to_not include('e8B')
+          expect(subject).to_not include('e8N')
+        end
+      end
+    end
+
+    context "when it is black's turn" do
+      before { game.board.add(piece: King.new(side: :black), at: 'e4') } # for legal move calculation
+      let(:game) { Game.new(default: false, turn: :black) }
+
+      context "when a pawn is able to reach the back rank" do
+        before { game.board.add(piece: Pawn.new(side: :black), at: 'e2') }
+
+        it "should not include the normal move" do
+          expect(subject).to_not include('e1')
+        end
+
+        it "should include the promotion to Q, R, B, and N" do
+          expect(subject).to include('e1Q')
+          expect(subject).to include('e1R')
+          expect(subject).to include('e1B')
+          expect(subject).to include('e1N')
+        end
+      end
+
+      context "when a pawn is able to reach the back rank with capture" do
+        before do
+          game.board.add(piece: Pawn.new(side: :black), at: 'e2')
+          game.board.add(piece: Knight.new(side: :white), at: 'd1')
+        end
+
+        it "should not include the normal move" do
+          expect(subject).to_not include('e1')
+        end
+
+        it "should include the promotion to Q, R, B, and N" do
+          expect(subject).to include('e1Q')
+          expect(subject).to include('e1R')
+          expect(subject).to include('e1B')
+          expect(subject).to include('e1N')
+        end
+
+        it "should include the promotion to Q, R, B, and N through capture" do
+          expect(subject).to include('exd1Q')
+          expect(subject).to include('exd1R')
+          expect(subject).to include('exd1B')
+          expect(subject).to include('exd1N')
+        end
+      end
+
+      context "when a pawn is unable to reach the back rank" do
+        before do
+          game.board.add(piece: Pawn.new(side: :black), at: 'e2')
+          game.board.add(piece: Knight.new(side: :white), at: 'e1')
+        end
+
+        it "should not include promotion moves" do
+          expect(subject).to_not include('e1')
+          expect(subject).to_not include('e1Q')
+          expect(subject).to_not include('e1R')
+          expect(subject).to_not include('e1B')
+          expect(subject).to_not include('e1N')
+        end
+      end
+    end
+  end
+
   describe "#legal_move?" do
     subject { game.legal_move?(move) }
     let(:game) { Game.new(default: true) }

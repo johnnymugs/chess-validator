@@ -84,9 +84,10 @@ module CV
     def calculate_legal_moves
       moves = board.possible_moves_for(turn) + legal_castling_moves
       moves = filter_moves_that_result_in_check(moves)
-
       assign_notation(moves)
       clarify_ambiguity(moves)
+
+      adjust_for_pawn_promotion(moves)
     end
 
     def filter_moves_that_result_in_check(moves)
@@ -156,6 +157,37 @@ module CV
     end
 
     ### /castling ###
+
+    ### Pawn promotion ###
+
+    def adjust_for_pawn_promotion(moves)
+      promo_backrank = turn == :white ? '8' : '1'
+      promo_moves = moves.select { |move| move.piece.is_a?(Pawn) && move.dest[1] == promo_backrank }
+
+      moves -= promo_moves
+      promo_moves.each do |move|
+        moves << promotion_move(basic_move: move, promote_to: Queen.new(side: turn))
+        moves << promotion_move(basic_move: move, promote_to: Bishop.new(side: turn))
+        moves << promotion_move(basic_move: move, promote_to: Knight.new(side: turn))
+        moves << promotion_move(basic_move: move, promote_to: Rook.new(side: turn))
+      end
+      moves
+    end
+
+    def promotion_move(basic_move:, promote_to:)
+      PossibleMove.new(
+        promote_to: promote_to,
+        notation: basic_move.to_notation + promote_to.to_notation,
+        rank: basic_move.rank,
+        file: basic_move.file,
+        can_capture: basic_move.can_capture?,
+        requires_capture: basic_move.requires_capture?,
+        origin: basic_move.origin,
+        piece: board.piece_at(basic_move.origin)
+      )
+    end
+
+    ### /pawn promotion ###
 
     def assign_notation(moves)
       moves.each do |move|
