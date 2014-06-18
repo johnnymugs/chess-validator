@@ -35,6 +35,26 @@ describe Game do
       it { should change { game.board.piece_at('f1') } }
       it { should change { game.board.piece_at('g1') } }
     end
+
+    context "with a promotion" do
+      let(:game) { Game.new }
+      let(:move) { 'a8Q' }
+
+      before do
+        game.board.add(piece: King.new, at: 'e1')
+        game.board.add(piece: Pawn.new, at: 'a7')
+        game.board.add(piece: King.new(side: :black), at: 'e8') # necessary for move calculation
+      end
+
+      it { should change { game.turn }.from(:white).to(:black) }
+      it { should change { game.legal_moves.map(&:to_s) } }
+      it { should change { game.board.piece_at('a7') } }
+      it { should change { game.board.piece_at('a8') } }
+      it "should promote the piece" do
+        subject.call
+        expect(game.board.piece_at('a8').to_notation).to eq('Q')
+      end
+    end
   end
 
   describe "#check?" do

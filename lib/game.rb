@@ -43,9 +43,17 @@ module CV
     def move!(move_in_notation)
       if move = find_move_by_notation(move_in_notation)
         @board.move!(move.origin, move.dest)
+
+        # castle
         if second_move = move.secondary_move
           @board.move!(second_move.origin, second_move.dest)
         end
+
+        # pawn promotion
+        if promoted_piece = move.promote_to
+          @board.swap_piece_at(move.dest, with: move.promote_to)
+        end
+
         @turn = next_turn
         @legal_moves = nil
       else
@@ -166,10 +174,9 @@ module CV
 
       moves -= promo_moves
       promo_moves.each do |move|
-        moves << promotion_move(basic_move: move, promote_to: Queen.new(side: turn))
-        moves << promotion_move(basic_move: move, promote_to: Bishop.new(side: turn))
-        moves << promotion_move(basic_move: move, promote_to: Knight.new(side: turn))
-        moves << promotion_move(basic_move: move, promote_to: Rook.new(side: turn))
+        [ Queen, Bishop, Knight, Rook ].each do |possible_promotion|
+          moves << promotion_move(basic_move: move, promote_to: possible_promotion.new(side: turn, moved: true))
+        end
       end
       moves
     end

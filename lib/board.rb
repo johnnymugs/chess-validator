@@ -31,6 +31,11 @@ module CV
       @pieces[at] = piece
     end
 
+    def swap_piece_at(dest, with:)
+      raise RuntimeError.new("#{dest} is not a valid position") unless is_valid_position?(dest)
+      @pieces[dest] = with
+    end
+
     def possible_moves_for_piece(piece, at_position:nil)
       piece_position = at_position || position_for_piece(piece)
 
