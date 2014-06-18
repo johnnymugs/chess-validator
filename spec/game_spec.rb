@@ -17,6 +17,24 @@ describe Game do
     it { should change { game.turn }.from(:white).to(:black) }
     it { should change { game.legal_moves.map(&:to_s) } }
     it { should change { game.board.piece_at('e2') } }
+
+    context "with a castling move" do
+      let(:game) { Game.new }
+      let(:move) { 'O-O' }
+
+      before do
+        game.board.add(piece: King.new, at: 'e1')
+        game.board.add(piece: Rook.new, at: 'h1')
+        game.board.add(piece: King.new(side: :black), at: 'e8') # necessary for move calculation
+      end
+
+      it { should change { game.turn }.from(:white).to(:black) }
+      it { should change { game.legal_moves.map(&:to_s) } }
+      it { should change { game.board.piece_at('e1') } }
+      it { should change { game.board.piece_at('h1') } }
+      it { should change { game.board.piece_at('f1') } }
+      it { should change { game.board.piece_at('g1') } }
+    end
   end
 
   describe "#check?" do

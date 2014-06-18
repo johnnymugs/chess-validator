@@ -42,8 +42,11 @@ module CV
 
     def move!(move_in_notation)
       if move = find_move_by_notation(move_in_notation)
-        @turn = next_turn
         @board.move!(move.origin, move.dest)
+        if second_move = move.secondary_move
+          @board.move!(second_move.origin, second_move.dest)
+        end
+        @turn = next_turn
         @legal_moves = nil
       else
         raise RuntimeError.new("Invalid move! (#{move_in_notation})")
