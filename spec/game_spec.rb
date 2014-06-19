@@ -25,6 +25,14 @@ describe Game do
       expect(game.previous_move[:in_notation]).to eq('e4')
     end
 
+    context "with non-standard capitalization" do
+      let(:move) { 'E4' }
+
+      it { should change { game.turn }.from(:white).to(:black) }
+      it { should change { game.legal_moves.map(&:to_s) } }
+      it { should change { game.board.piece_at('e2') } }
+    end
+
     context "with a castling move" do
       let(:game) { Game.new }
       let(:move) { 'O-O' }
@@ -623,6 +631,11 @@ describe Game do
       it { should be_truthy }
     end
 
+    context "wth a legal move with non-standard capitalization" do
+      let(:move) { 'E4' }
+      it { should be_truthy }
+    end
+
     context "with an illegal move" do
       let(:move) { 'e7' }
       it { should be_falsy }
@@ -641,6 +654,12 @@ describe Game do
     end
 
     it { should eq(['Rac4', 'Rhc4']) }
+
+    context "with non-standard capitalization" do
+      let(:move) { 'C4' }
+
+      it { should eq(['Rac4', 'Rhc4']) }
+    end
   end
 end
 

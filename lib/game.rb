@@ -67,12 +67,12 @@ module CV
     end
 
     def legal_move?(move)
-      legal_moves.map(&:to_notation).include?(move)
+      legal_moves.map(&:to_notation).map(&:downcase).include?(move.downcase)
     end
 
     def ambiguous_move_matches_for(move)
       legal_moves
-      .select { |legal_move| move[-2..-1] == legal_move.to_s }
+      .select { |legal_move| move.downcase[-2..-1] == legal_move.dest }
       .map(&:to_notation)
     end
 
@@ -243,7 +243,7 @@ module CV
     end
 
     def find_move_by_notation(move_in_notation)
-      legal_moves.detect { |move| move.to_notation == move_in_notation }
+      legal_moves.detect { |move| move.to_notation.downcase == move_in_notation.downcase }
     end
 
     def build_previous_move(move)
