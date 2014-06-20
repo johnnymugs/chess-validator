@@ -1,6 +1,7 @@
 module CV
   class Game
     attr_reader :board, :turn
+    attr_accessor :previous_move
 
     def self.load_from_moves(moves)
       game = self.new(default: true)
@@ -56,6 +57,7 @@ module CV
 
         @turn = next_turn
         @legal_moves = nil
+        @previous_move = build_previous_move(move)
       else
         raise RuntimeError.new("Invalid move! (#{move_in_notation})")
       end
@@ -239,6 +241,14 @@ module CV
 
     def find_move_by_notation(move_in_notation)
       legal_moves.detect { |move| move.to_notation == move_in_notation }
+    end
+
+    def build_previous_move(move)
+      {
+        origin: move.origin,
+        dest: move.dest,
+        in_notation: move.to_notation
+      }
     end
 
     def set_up_default_board

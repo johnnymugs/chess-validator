@@ -18,6 +18,13 @@ describe Game do
     it { should change { game.legal_moves.map(&:to_s) } }
     it { should change { game.board.piece_at('e2') } }
 
+    it "should set the previous move" do
+      subject.call
+      expect(game.previous_move[:origin]).to eq('e2')
+      expect(game.previous_move[:dest]).to eq('e4')
+      expect(game.previous_move[:in_notation]).to eq('e4')
+    end
+
     context "with a castling move" do
       let(:game) { Game.new }
       let(:move) { 'O-O' }
@@ -34,6 +41,7 @@ describe Game do
       it { should change { game.board.piece_at('h1') } }
       it { should change { game.board.piece_at('f1') } }
       it { should change { game.board.piece_at('g1') } }
+      it "should set the previous move"
     end
 
     context "with a promotion" do
