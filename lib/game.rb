@@ -45,9 +45,12 @@ module CV
       if move = find_move_by_notation(move_in_notation)
         @board.move!(move.origin, move.dest)
 
+        @previous_move = build_previous_move(move)
+
         # castle
         if second_move = move.secondary_move
           @board.move!(second_move.origin, second_move.dest)
+          @previous_move[:secondary_move] = build_previous_move(second_move)
         end
 
         # pawn promotion
@@ -57,7 +60,6 @@ module CV
 
         @turn = next_turn
         @legal_moves = nil
-        @previous_move = build_previous_move(move)
       else
         raise RuntimeError.new("Invalid move! (#{move_in_notation})")
       end

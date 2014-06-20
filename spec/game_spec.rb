@@ -41,7 +41,16 @@ describe Game do
       it { should change { game.board.piece_at('h1') } }
       it { should change { game.board.piece_at('f1') } }
       it { should change { game.board.piece_at('g1') } }
-      it "should set the previous move"
+
+      it "should set the previous move" do
+        subject.call
+
+        expect(game.previous_move[:origin]).to eq('e1')
+        expect(game.previous_move[:dest]).to eq('g1')
+        expect(game.previous_move[:in_notation]).to eq('O-O')
+        expect(game.previous_move[:secondary_move][:origin]).to eq('h1')
+        expect(game.previous_move[:secondary_move][:dest]).to eq('f1')
+      end
     end
 
     context "with a promotion" do
