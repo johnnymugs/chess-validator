@@ -1,7 +1,6 @@
 module CV
   class Game
-    attr_reader :board, :turn
-    attr_accessor :previous_move
+    attr_reader :board, :turn, :previous_move
 
     def self.load_from_moves(moves)
       game = self.new(default: true)
@@ -12,7 +11,7 @@ module CV
     end
 
     def self.load_from_json(json)
-      game = self.new(turn: json[:turn])
+      game = self.new(turn: json[:turn], previous_move: json[:previous_move])
       json[:pieces].each do |piece|
         obj_piece = Object.const_get(piece[:type]).new(side: piece[:side].to_sym, moved: piece[:moved])
         game.board.add(piece: obj_piece, at: piece[:position])
@@ -20,9 +19,10 @@ module CV
       game
     end
 
-    def initialize(default: false, turn: :white)
+    def initialize(default: false, turn: :white, previous_move: nil)
       @turn = turn
       @board = Board.new
+      @previous_move = previous_move
 
       set_up_default_board if default
     end
@@ -30,6 +30,7 @@ module CV
     def to_json
       {
         turn: @turn,
+        previous_move: @previous_move,
         pieces: @board.pieces.map do |position, piece|
           {
             type: piece.class.to_s,
