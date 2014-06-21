@@ -5,7 +5,16 @@ module CV
     def self.load_from_moves(moves)
       game = self.new(default: true)
       MoveParser.new(moves).parse do |move|
+        # check?
+        if move[-1] == "+"
+          move = move[0..-2]
+          must_check = true
+        else
+          must_check = false
+        end
+
         game.move!(move)
+        raise "Failed to detect check!" unless !must_check || game.check?
       end
       game
     end
