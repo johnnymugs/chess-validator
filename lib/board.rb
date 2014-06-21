@@ -36,6 +36,10 @@ module CV
       @pieces[dest] = with
     end
 
+    def remove_piece_at(dest)
+      @pieces.delete(dest)
+    end
+
     def possible_moves_for_piece(piece, at_position:nil)
       piece_position = at_position || position_for_piece(piece)
 

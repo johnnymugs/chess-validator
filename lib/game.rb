@@ -46,6 +46,11 @@ module CV
       if move = find_move_by_notation(move_in_notation)
         @board.move!(move.origin, move.dest)
 
+        # en passant
+        if move.is_en_passant?
+          @board.remove_piece_at(@previous_move[:dest])
+        end
+
         @previous_move = build_previous_move(move)
 
         # castle

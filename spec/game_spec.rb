@@ -80,6 +80,26 @@ describe Game do
         expect(game.board.piece_at('a8').to_notation).to eq('Q')
       end
     end
+
+    context "with en passant" do
+      let(:game) { Game.new(previous_move: previous_move) }
+      let(:move) { 'axb6' }
+      let(:previous_move) { { origin: 'b7', dest: 'b5', in_notation: 'b5' } }
+
+      before do
+        game.board.add(piece: King.new, at: 'e1')               # for legal move calculation
+        game.board.add(piece: King.new(side: :black), at: 'e8') # for legal move calculation
+        game.board.add(piece: Pawn.new, at: 'a5')               # pawn that will capture en passant
+        game.board.add(piece: Pawn.new(side: :black), at: 'b5') # pawn that gets captured
+      end
+
+      it { should change { game.turn }.from(:white).to(:black) }
+      it { should change { game.legal_moves.map(&:to_s) } }
+
+      it { should change { game.board.piece_at('a5') }.to nil }   # capture the pawn
+      it { should change { game.board.piece_at('b6') }.from nil } # new location of white pawn
+      it { should change { game.board.piece_at('b5') }.to nil }   # old location of white pawn
+    end
   end
 
   describe "#check?" do
