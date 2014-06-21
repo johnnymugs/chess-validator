@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require 'spec_helper'
 
 describe "Mestovic vs. Gligoric (1971)", integration: true do # a good test for pawn promotion, from http://www.chessgames.com/perl/chessgame?gid=1158884

@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require 'spec_helper'
 
 describe "Sutovsky vs Morozevich (1998)", integration: true do # from http://www.chessgames.com/perl/chessgame?gid=1408089

@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require 'spec_helper'
 
 describe "Anand vs. Kasparov (1995)", integration: true do # from http://www.chessgames.com/perl/chessgame?gid=1018574
