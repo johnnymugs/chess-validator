@@ -203,7 +203,7 @@ module CV
 
     def assign_notation(moves)
       moves.each do |move|
-        return move if move.notation
+        next if move.notation
         capture = board.piece_at(move.dest) ? true : false
         piece_notation = (capture && move.piece.is_a?(Pawn)) ? move.origin[0] : move.piece.to_notation
         move.notation =
