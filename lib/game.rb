@@ -95,13 +95,45 @@ module CV
     private
 
     def calculate_legal_moves
-      moves = board.possible_moves_for(turn) + legal_castling_moves
+      moves = board.possible_moves_for(turn) + legal_castling_moves + legal_en_passant_moves
       moves = filter_moves_that_result_in_check(moves)
+
       assign_notation(moves)
       clarify_ambiguity(moves)
 
-      adjust_for_pawn_promotion(moves)
+      moves = adjust_for_pawn_promotion(moves)
     end
+
+    ### En passant ###
+
+    def legal_en_passant_moves
+      moves = []
+      return moves unless previous_move_was_two_space_pawn_move?
+
+      original_position = Position.new(previous_move[:dest])
+      en_passant_position1 = Position.new(rank: original_position.rank, file: original_position.file + 1)
+      en_passant_position2 = Position.new(rank: original_position.rank, file: original_position.file - 1)
+
+      en_passant_pawn1 = board.piece_at(en_passant_position1)
+      en_passant_pawn2 = board.piece_at(en_passant_position2)
+
+      direction = turn == :white ? +1 : -1
+
+      moves << PossibleMove.new(rank: original_position.rank + direction, file: original_position.file, origin: en_passant_position1.to_s, piece: en_passant_pawn1, en_passant: true) if en_passant_pawn1.is_a?(Pawn) && en_passant_pawn1.side == turn
+      moves << PossibleMove.new(rank: original_position.rank + direction, file: original_position.file, origin: en_passant_position2.to_s, piece: en_passant_pawn2, en_passant: true) if en_passant_pawn2.is_a?(Pawn) && en_passant_pawn2.side == turn
+      moves
+    end
+
+    def previous_move_was_two_space_pawn_move?
+      fourth_rank = turn == :white ? '5' : '4'
+      second_rank = turn == :white ? '7' : '2'
+      ('a'..'h').detect do |file|
+        previous_move == { origin: (file + second_rank), dest: (file + fourth_rank), in_notation: (file + fourth_rank) }
+      end
+    end
+
+    ### /en passant ###
+
 
     def filter_moves_that_result_in_check(moves)
       moves.select do |move|
@@ -204,7 +236,7 @@ module CV
     def assign_notation(moves)
       moves.each do |move|
         next if move.notation
-        capture = board.piece_at(move.dest) ? true : false
+        capture = (board.piece_at(move.dest) || move.is_en_passant?) ? true : false
         piece_notation = (capture && move.piece.is_a?(Pawn)) ? move.origin[0] : move.piece.to_notation
         move.notation =
           piece_notation +

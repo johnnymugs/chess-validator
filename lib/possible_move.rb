@@ -3,7 +3,7 @@ module CV
     attr_accessor :notation
     attr_reader :piece, :secondary_move, :promote_to
 
-    def initialize(rank:, file:, requires_capture: false, can_capture: true, piece:, origin:, notation: nil, secondary_move: nil, promote_to: nil)
+    def initialize(rank:, file:, requires_capture: false, can_capture: true, piece:, origin:, notation: nil, secondary_move: nil, promote_to: nil, en_passant: false)
       @requires_capture = requires_capture
       @can_capture = can_capture
       @piece = piece
@@ -11,6 +11,7 @@ module CV
       @notation = notation
       @secondary_move = secondary_move # for castling
       @promote_to = promote_to
+      @en_passant = en_passant
       super(rank: rank, file: file)
     end
 
@@ -32,6 +33,10 @@ module CV
 
     def to_notation
       @notation
+    end
+
+    def is_en_passant?
+      @en_passant
     end
   end
 end

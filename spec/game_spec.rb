@@ -622,6 +622,91 @@ describe Game do
     end
   end
 
+  describe "en passant" do
+    subject { game.legal_moves.map(&:to_notation) }
+    before { game.board.add(piece: King.new, at: 'e1') } # for legal move calculation
+
+    let(:game) { Game.new(default: false, previous_move: previous_move) }
+
+    context "when it's white's turn" do
+      let(:previous_move) { { origin: 'e7', dest: 'e5', in_notation: 'e5' } } # black's pawn taking two squares on its first move
+      before { game.board.add(piece: Pawn.new(side: :black, moved: true), at: 'e5') }
+
+      context "and black's last move was a pawn moving two spaces forward" do
+        context "and white has a pawn on its fifth rank" do
+          context "and the pawn is on a neighboring file of the previous move" do
+            before { game.board.add(piece: Pawn.new(moved: true), at: 'f5') }
+            it "should include the en passant move" do
+              expect(subject).to include('fxe6')
+            end
+          end
+
+          context "but the pawn is not on a neighboring file of the previous move" do
+            before { game.board.add(piece: Pawn.new(moved: true), at: 'a5') }
+            it "should not include the en passant move" do
+              expect(subject).to_not include('fxe6')
+            end
+          end
+        end
+
+        context "but white does not have a pawn on its fifth rank" do
+          before { game.board.add(piece: Pawn.new(moved: true), at: 'f2') }
+          it "should not include the en passant move" do
+            expect(subject).to_not include('fxe6')
+          end
+        end
+      end
+
+      context "but black's last move was a pawn moving one space forward to the fifth rank" do
+        before { game.board.add(piece: Pawn.new(moved: true), at: 'f5') } # white pawn that would otherwise be able to capture en passant
+        let(:previous_move) { { origin: 'e6', dest: 'e5', in_notation: 'e5' } }
+        it "should not include the en passant move" do
+          expect(subject).to_not include('fxe6')
+        end
+      end
+    end
+
+    context "when it's black's turn" do
+      let(:game) { Game.new(default: false, turn: :black, previous_move: previous_move) }
+      before { game.board.add(piece: King.new(side: :black), at: 'e8') } # for legal move calculation
+      let(:previous_move) { { origin: 'e2', dest: 'e4', in_notation: 'e4' } } # white's pawn taking two squares on its first move
+      before { game.board.add(piece: Pawn.new(side: :white, moved: true), at: 'e4') }
+
+      context "and white's last move was a pawn moving two spaces forward" do
+        context "and black has a pawn on its fifth rank" do
+          context "and the pawn is on a neighboring file of the previous move" do
+            before { game.board.add(piece: Pawn.new(side: :black, moved: true), at: 'd4') }
+            it "should include the en passant move" do
+              expect(subject).to include('dxe3')
+            end
+          end
+
+          context "but the pawn is not on a neighboring file of the previous move" do
+            before { game.board.add(piece: Pawn.new(side: :black, moved: true), at: 'a4') }
+            it "should not include the en passant move" do
+              expect(subject).to_not include('dxe3')
+            end
+          end
+        end
+
+        context "but black does not have a pawn on its fifth rank" do
+          before { game.board.add(piece: Pawn.new(side: :black, moved: true), at: 'd2') }
+          it "should not include the en passant move" do
+            expect(subject).to_not include('dxe3')
+          end
+        end
+      end
+
+      context "but white's last move was a pawn moving one space forward to the fifth rank" do
+        before { game.board.add(piece: Pawn.new(side: :black, moved: true), at: 'd4') } # black pawn that would otherwise be able to capture en passant
+        let(:previous_move) { { origin: 'e3', dest: 'e4', in_notation: 'e4' } }
+        it "should not include the en passant move" do
+          expect(subject).to_not include('dxe3')
+        end
+      end
+    end
+  end
+
   describe "#legal_move?" do
     subject { game.legal_move?(move) }
     let(:game) { Game.new(default: true) }
