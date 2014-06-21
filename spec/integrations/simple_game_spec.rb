@@ -16,6 +16,5 @@ describe "a few simple moves", integration: true do
   end
 
   it_should_behave_like "a valid game"
-  it_should_behave_like "a serializable game"
 end
 

@@ -16,6 +16,5 @@ describe "Sutovsky vs Morozevich (1998)", integration: true do # from http://www
   end
 
   it_should_behave_like "a valid game"
-  it_should_behave_like "a serializable game"
 end
 

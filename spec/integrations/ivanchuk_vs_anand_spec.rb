@@ -16,6 +16,5 @@ describe "Ivanchuk vs Anand", integration: true do # from http://www.chessgames.
   end
 
   it_should_behave_like "a valid game"
-  it_should_behave_like "a serializable game"
 end
 

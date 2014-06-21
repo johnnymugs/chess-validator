@@ -16,6 +16,5 @@ describe "Anand vs. Kasparov (1995)", integration: true do # from http://www.che
   end
 
   it_should_behave_like "a valid game"
-  it_should_behave_like "a serializable game"
 end
 

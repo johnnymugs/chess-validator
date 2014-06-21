@@ -16,6 +16,5 @@ describe "Mestovic vs. Gligoric (1971)", integration: true do # a good test for 
   end
 
   it_should_behave_like "a valid game"
-  it_should_behave_like "a serializable game"
 end
 
