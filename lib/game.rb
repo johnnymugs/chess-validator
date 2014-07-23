@@ -193,18 +193,21 @@ module CV
     end
 
     def path_clear_for_queenside_castle?
-      !(
-        board.piece_at("b#{backrank}") ||
-        board.piece_at("c#{backrank}") ||
-        board.piece_at("d#{backrank}")
-      )
+      path_clear_for_castle?([ "b#{backrank}", "c#{backrank}", "d#{backrank}" ])
     end
 
     def path_clear_for_kingside_castle?
-      !(
-        board.piece_at("f#{backrank}") ||
-        board.piece_at("g#{backrank}")
-      )
+      path_clear_for_castle?([ "f#{backrank}", "g#{backrank}" ])
+    end
+
+    def path_clear_for_castle?(dests)
+      dests.each do |dest|
+        return false if board.piece_at(dest)
+        tempboard = board.dupe
+        tempboard.move!(board.king_position(turn).to_s, dest)
+        return false if tempboard.possible_moves_for(next_turn).include?(tempboard.king_position(turn))
+      end
+      true
     end
 
     def backrank

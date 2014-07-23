@@ -362,6 +362,12 @@ describe Game do
           it { should_not include('O-O-O') }
         end
 
+        context "when castling would move the king through check" do
+          before { game.board.add(piece: Pawn.new(side: :black), at: 'c2') }
+
+          it { should_not include('O-O-O') }
+        end
+
         context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
           it { should include('O-O-O') }
         end
@@ -399,6 +405,12 @@ describe Game do
 
         context "when castling would put the king in check" do
           before { game.board.add(piece: Rook.new(side: :black), at: 'g8') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when castling would move the king through check" do
+          before { game.board.add(piece: Pawn.new(side: :black), at: 'g2') }
 
           it { should_not include('O-O') }
         end
@@ -459,6 +471,12 @@ describe Game do
           it { should_not include('O-O-O') }
         end
 
+        context "when castling would move the king through check" do
+          before { game.board.add(piece: Pawn.new, at: 'c7') }
+
+          it { should_not include('O-O-O') }
+        end
+
         context "when the king is not in check, neither the king nor the rook has moved, and no pieces block the move" do
           it { should include('O-O-O') }
         end
@@ -495,7 +513,13 @@ describe Game do
         end
 
         context "when castling would put the king in check" do
-          before { game.board.add(piece: Rook.new, at: 'g8') }
+          before { game.board.add(piece: Rook.new, at: 'g1') }
+
+          it { should_not include('O-O') }
+        end
+
+        context "when castling would move the king through check" do
+          before { game.board.add(piece: Pawn.new, at: 'g7') }
 
           it { should_not include('O-O') }
         end
